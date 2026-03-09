@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mağaza – Yösarete</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+.tab-bar { background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:var(--top);z-index:50; }
+.tab-bar-inner { max-width:1200px;margin:0 auto;padding:0 5vw;display:flex;gap:0;overflow-x:auto; }
+.tab-btn { padding:18px 28px;font-size:.88rem;font-weight:700;font-family:'DM Sans',sans-serif;color:var(--mid);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:8px; }
+.tab-btn:hover { color:var(--accent); }
+.tab-btn.active { color:var(--accent);border-bottom-color:var(--accent); }
+.tab-count { background:var(--soft);border-radius:20px;padding:2px 8px;font-size:.7rem; }
+.tab-btn.active .tab-count { background:#fff5f0;color:var(--accent); }
+
+.store-main { max-width:1200px;margin:0 auto;padding:36px 5vw 80px; }
+.cat-panel { display:none; }
+.cat-panel.active { display:block; }
+
+/* CAT HERO */
+.cat-hero { border-radius:20px;padding:36px 40px;margin-bottom:36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px; }
+.ch-mat { background:linear-gradient(135deg,#fff5f0 0%,#ffd6c0 100%); }
+.ch-geo { background:linear-gradient(135deg,#eff6ff 0%,#bfdbfe 100%); }
+.ch-iq  { background:linear-gradient(135deg,#f0fdf4 0%,#bbf7d0 100%); }
+.ch-den { background:linear-gradient(135deg,#fefce8 0%,#fde68a 100%); }
+.cat-hero-text h2 { font-family:'DM Serif Display',serif;font-size:1.9rem;margin-bottom:8px;color:var(--ink); }
+.cat-hero-text p { font-size:.9rem;color:var(--mid);max-width:420px;line-height:1.7; }
+.cat-hero-icon { font-size:5rem;line-height:1; }
+
+/* PRODUCTS GRID */
+.products-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px; }
+.product-card { background:var(--white);border:1px solid var(--border);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s; }
+.product-card:hover { transform:translateY(-5px);box-shadow:0 16px 48px rgba(0,0,0,.09); }
+.product-card.featured { border:2px solid var(--accent); }
+.product-visual { height:150px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative; }
+.pv-mat1 { background:linear-gradient(135deg,#fff0eb,#ffc9a8); }
+.pv-mat2 { background:linear-gradient(135deg,#ffe5d9,#ffb38a); }
+.pv-mat3 { background:linear-gradient(135deg,#ffd9cc,#ff9a6c); }
+.pv-geo1 { background:linear-gradient(135deg,#e8f0ff,#b8d0ff); }
+.pv-geo2 { background:linear-gradient(135deg,#d6e8ff,#90baff); }
+.pv-geo3 { background:linear-gradient(135deg,#c4daff,#6fa3ff); }
+.pv-iq1  { background:linear-gradient(135deg,#e8fff0,#a8f0c0); }
+.pv-iq2  { background:linear-gradient(135deg,#d6ffe8,#80e8a8); }
+.pv-iq3  { background:linear-gradient(135deg,#c4ffd8,#58e090); }
+.pv-den1 { background:linear-gradient(135deg,#fffce8,#ffe8a8); }
+.pv-den2 { background:linear-gradient(135deg,#fff8d6,#ffd880); }
+.pv-den3 { background:linear-gradient(135deg,#fff4c4,#ffc858); }
+
+.prod-badge { position:absolute;top:12px;right:12px;background:var(--accent);color:#fff;font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:20px; }
+.prod-badge.new { background:var(--green); }
+.prod-badge.hot { background:var(--red); }
+
+.product-body { padding:20px 22px;flex:1;display:flex;flex-direction:column; }
+.prod-type { font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px; }
+.prod-name { font-family:'DM Serif Display',serif;font-size:1.12rem;margin-bottom:8px;line-height:1.3; }
+.prod-desc { font-size:.82rem;color:var(--mid);line-height:1.6;flex:1;margin-bottom:14px; }
+.prod-includes { list-style:none;margin-bottom:16px;display:flex;flex-direction:column;gap:4px; }
+.prod-includes li { font-size:.78rem;color:var(--mid);display:flex;align-items:center;gap:7px; }
+.prod-includes li::before { content:'✓';color:var(--accent);font-weight:700;flex-shrink:0; }
+.prod-footer { display:flex;align-items:center;justify-content:space-between;margin-top:auto; }
+.prod-price { font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--ink); }
+.prod-price sub { font-family:'DM Sans',sans-serif;font-size:.72rem;color:var(--mid);font-weight:400; }
+.buy-btn { background:var(--ink);color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:.82rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background .2s,transform .15s; }
+.buy-btn:hover { background:var(--accent);transform:translateY(-1px); }
+.product-card.featured .buy-btn { background:var(--accent); }
+.product-card.featured .buy-btn:hover { background:#c94e1a; }
+
+/* PAKET BANNER */
+.paket-banner { background:var(--ink);border-radius:18px;padding:32px 36px;margin-top:36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;color:#fff; }
+.pb-text h3 { font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:8px; }
+.pb-text p { font-size:.88rem;color:rgba(255,255,255,.6);max-width:420px;line-height:1.6; }
+.pb-price { text-align:center; }
+.pb-price .old { font-size:.85rem;color:rgba(255,255,255,.4);text-decoration:line-through;margin-bottom:4px; }
+.pb-price .new-p { font-family:'DM Serif Display',serif;font-size:2rem;color:var(--accent); }
+.pb-price .save { font-size:.75rem;color:var(--green);font-weight:700;margin-top:4px; }
+
+/* MODAL */
+.modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s; }
+.modal-overlay.open { opacity:1;pointer-events:all; }
+.modal { background:var(--white);border-radius:20px;max-width:460px;width:92%;transform:translateY(20px);transition:transform .25s;padding:36px; }
+.modal-overlay.open .modal { transform:translateY(0); }
+.modal h3 { font-family:'DM Serif Display',serif;font-size:1.4rem;margin-bottom:8px; }
+.modal p { font-size:.88rem;color:var(--mid);line-height:1.65;margin-bottom:20px; }
+.modal-price { font-family:'DM Serif Display',serif;font-size:2rem;color:var(--accent);margin-bottom:20px; }
+.modal-btns { display:flex;gap:12px; }
+.modal-cancel { flex:1;background:var(--soft);border:none;border-radius:10px;padding:12px;font-family:'DM Sans',sans-serif;font-size:.88rem;cursor:pointer; }
+.modal-pay { flex:2;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;transition:background .2s; }
+.modal-pay:hover { background:#c94e1a; }
+.modal-info { background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px;font-size:.78rem;color:#1e40af;margin-bottom:20px;line-height:1.6; }
+
+@media(max-width:700px){ .cat-hero{flex-direction:column;gap:12px;} .cat-hero-icon{font-size:3rem;} .paket-banner{flex-direction:column;} }
+</style>
+</head>
+<body>
+<script src="_shared.js"></script>
+<script>injectNav('magaza');</script>
+
+<div class="page-content">
+<div class="hero-band">
+  <div class="hero-band-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow" style="background:var(--accent);">📚 Mağaza</div>
+    <h1>Soru Bankası <em>Setleri</em></h1>
+    <p>Özgün sorular, adım adım çözümler. PDF olarak anında teslim. Bir kez al, sınava kadar çalış.</p>
+  </div>
+</div>
+
+<div class="tab-bar">
+  <div class="tab-bar-inner">
+    <button class="tab-btn active" id="tab-matematik" onclick="switchCat('matematik',this)">📐 Matematik <span class="tab-count">6</span></button>
+    <button class="tab-btn" id="tab-geometri" onclick="switchCat('geometri',this)">📏 Geometri <span class="tab-count">6</span></button>
+    <button class="tab-btn" id="tab-iq" onclick="switchCat('iq',this)">🧠 IQ / Mantık <span class="tab-count">6</span></button>
+    <button class="tab-btn" id="tab-denemeler" onclick="switchCat('denemeler',this)">📋 Denemeler <span class="tab-count">6</span></button>
+  </div>
+</div>
+
+<div class="store-main">
+
+  <!-- ── MATEMATİK ── -->
+  <div class="cat-panel active" id="panel-matematik">
+    <div class="cat-hero ch-mat reveal">
+      <div class="cat-hero-text">
+        <h2>Matematik Setleri</h2>
+        <p>YÖS sınavına özel konu anlatımlı kitaplar, konu föyleri ve deneme sınavları. Temel kavramdan ileri düzeye tam kapsam.</p>
+      </div>
+      <div class="cat-hero-icon">📐</div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <div class="product-visual pv-mat1">📗<span class="prod-badge new">YENİ</span></div>
+        <div class="product-body">
+          <div class="prod-type">Konu Anlatımlı Kitap</div>
+          <div class="prod-name">Matematik Kitap 1 – Temel Konular</div>
+          <div class="prod-desc">Sayılar, kesirler, oran-orantı, yüzdeler ve temel cebir. YÖS'e sıfırdan başlayanlar için.</div>
+          <ul class="prod-includes">
+            <li>180 sayfa PDF kitap</li>
+            <li>Her konuda çözümlü örnekler</li>
+            <li>Bölüm sonu test soruları</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺149 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('Matematik Kitap 1','₺149','Temel matematik konularını kapsayan 180 sayfalık PDF kitap.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card featured reveal">
+        <div class="product-visual pv-mat2">📘<span class="prod-badge hot">POPÜLER</span></div>
+        <div class="product-body">
+          <div class="prod-type">Konu Anlatımlı Kitap</div>
+          <div class="prod-name">Matematik Kitap 2 – İleri Konular</div>
+          <div class="prod-desc">Fonksiyonlar, denklemler, eşitsizlikler, logaritma ve diziler. Kitap 1'in devamı niteliğinde.</div>
+          <ul class="prod-includes">
+            <li>210 sayfa PDF kitap</li>
+            <li>Sınav odaklı soru tipleri</li>
+            <li>İpucu ve kısa yol teknikleri</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺149 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('Matematik Kitap 2','₺149','İleri matematik konularını kapsayan 210 sayfalık PDF kitap.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-mat1">📑</div>
+        <div class="product-body">
+          <div class="prod-type">Konu Föyleri</div>
+          <div class="prod-name">Matematik Konu Föyleri – Tam Set</div>
+          <div class="prod-desc">Her konu için 2–4 sayfalık özet föyler. Sınav öncesi hızlı tekrar için ideal.</div>
+          <ul class="prod-includes">
+            <li>24 ayrı konu föyü</li>
+            <li>Formül özetleri</li>
+            <li>Akılda kalıcı şemalar</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺99 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('Matematik Konu Föyleri','₺99','24 konu föyü içeren PDF set.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-mat2">📝</div>
+        <div class="product-body">
+          <div class="prod-type">Deneme Sınavı</div>
+          <div class="prod-name">Matematik Denemesi – 5'li Set</div>
+          <div class="prod-desc">5 adet 20 soruluk matematik denemesi. Her biri çözümlü, YÖS soru formatında.</div>
+          <ul class="prod-includes">
+            <li>5 × 20 soru = 100 soru</li>
+            <li>Tüm cevaplar çözümlü</li>
+            <li>Puan çizelgesi dahil</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺129 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('Matematik Denemesi 5\'li','₺129','5 çözümlü deneme sınavı PDF seti.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-mat3">🎯</div>
+        <div class="product-body">
+          <div class="prod-type">Soru Bankası</div>
+          <div class="prod-name">Matematik Soru Bankası – 500 Soru</div>
+          <div class="prod-desc">Konulara göre sıralanmış 500 özgün soru ve çözümü. Pratik yapmak isteyenler için.</div>
+          <ul class="prod-includes">
+            <li>500 özgün soru</li>
+            <li>Konulara göre bölünmüş</li>
+            <li>Zorluk seviyeleri belirtilmiş</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺199 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('Matematik Soru Bankası','₺199','500 özgün soru ve çözüm PDF seti.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-mat1">📦<span class="prod-badge" style="background:var(--gold);">FIRSAT</span></div>
+        <div class="product-body">
+          <div class="prod-type">Tam Paket</div>
+          <div class="prod-name">Matematik Tam Paket – Hepsi Dahil</div>
+          <div class="prod-desc">Kitap 1+2, föyler, denemeler ve soru bankası tek pakette. %30 indirimli.</div>
+          <ul class="prod-includes">
+            <li>2 kitap + 24 föy</li>
+            <li>5 deneme sınavı</li>
+            <li>500 soruluk banka</li>
+            <li>Yeni içerik güncellemeleri</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺449 <sub>/paket</sub></div>
+            <button class="buy-btn" onclick="openModal('Matematik Tam Paket','₺449','Tüm matematik materyallerini içeren tam paket.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="paket-banner reveal">
+      <div class="pb-text"><h3>Matematik + Geometri Kombo</h3><p>İki kategorinin tam paketini birlikte alarak %40 tasarruf et. YÖS sayısal bölümünün tamamına hazırlan.</p></div>
+      <div class="pb-price"><div class="old">₺898</div><div class="new-p">₺539</div><div class="save">%40 Tasarruf</div></div>
+      <button class="btn-primary" onclick="openModal('Mat+Geo Kombo','₺539','Matematik ve Geometri tam paketleri birlikte.')">Komboyu Al</button>
+    </div>
+  </div>
+
+  <!-- ── GEOMETRİ ── -->
+  <div class="cat-panel" id="panel-geometri">
+    <div class="cat-hero ch-geo reveal">
+      <div class="cat-hero-text">
+        <h2>Geometri Setleri</h2>
+        <p>Düzlem geometrisi, uzay geometrisi, analitik geometri ve koordinat sistemi. YÖS sınavında yüksek puan için kapsamlı hazırlık.</p>
+      </div>
+      <div class="cat-hero-icon">📏</div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <div class="product-visual pv-geo1">📗<span class="prod-badge new">YENİ</span></div>
+        <div class="product-body">
+          <div class="prod-type">Konu Anlatımlı Kitap</div>
+          <div class="prod-name">Geometri Kitap 1 – Düzlem Geometrisi</div>
+          <div class="prod-desc">Açılar, üçgenler, dörtgenler, çember ve çokgenler. Temel şekil bilgisinden sınav sorularına.</div>
+          <ul class="prod-includes">
+            <li>170 sayfa PDF kitap</li>
+            <li>Şekil destekli anlatım</li>
+            <li>Bölüm testleri dahil</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺149 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('Geometri Kitap 1','₺149','Düzlem geometrisi konu anlatımlı PDF kitap.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card featured reveal">
+        <div class="product-visual pv-geo2">📘<span class="prod-badge hot">POPÜLER</span></div>
+        <div class="product-body">
+          <div class="prod-type">Konu Anlatımlı Kitap</div>
+          <div class="prod-name">Geometri Kitap 2 – Analitik & Uzay</div>
+          <div class="prod-desc">Koordinat geometrisi, vektörler, katı cisimler ve uzay geometrisi sorularına tam hazırlık.</div>
+          <ul class="prod-includes">
+            <li>190 sayfa PDF kitap</li>
+            <li>3D şekil analizleri</li>
+            <li>Koordinat sistemi teknikleri</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺149 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('Geometri Kitap 2','₺149','Analitik ve uzay geometrisi PDF kitap.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-geo1">📑</div>
+        <div class="product-body">
+          <div class="prod-type">Konu Föyleri</div>
+          <div class="prod-name">Geometri Konu Föyleri – Tam Set</div>
+          <div class="prod-desc">Alan, çevre, hacim formülleri ve teorem özetleri. Sınav öncesi hızlı gözden geçirme.</div>
+          <ul class="prod-includes">
+            <li>20 ayrı konu föyü</li>
+            <li>Tüm formüller özetlenmiş</li>
+            <li>Görsel şema destekli</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺99 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('Geometri Föyleri','₺99','20 konu föyü PDF seti.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-geo2">📝</div>
+        <div class="product-body">
+          <div class="prod-type">Deneme Sınavı</div>
+          <div class="prod-name">Geometri Denemesi – 5'li Set</div>
+          <div class="prod-desc">5 adet 20 soruluk geometri denemesi. Çözümlü, YÖS formatında hazırlanmış.</div>
+          <ul class="prod-includes">
+            <li>5 × 20 soru = 100 soru</li>
+            <li>Tüm sorular çözümlü</li>
+            <li>Konu dağılım analizi</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺129 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('Geometri Denemesi','₺129','5 çözümlü geometri denemesi PDF.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-geo3">🎯</div>
+        <div class="product-body">
+          <div class="prod-type">Soru Bankası</div>
+          <div class="prod-name">Geometri Soru Bankası – 400 Soru</div>
+          <div class="prod-desc">Konulara ayrılmış 400 özgün soru. Temel, orta ve ileri zorluk seviyelerinde.</div>
+          <ul class="prod-includes">
+            <li>400 özgün soru</li>
+            <li>3 zorluk seviyesi</li>
+            <li>Konuya göre indexlenmiş</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺179 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('Geometri Soru Bankası','₺179','400 soru geometri bankası PDF.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-geo1">📦<span class="prod-badge" style="background:var(--gold);">FIRSAT</span></div>
+        <div class="product-body">
+          <div class="prod-type">Tam Paket</div>
+          <div class="prod-name">Geometri Tam Paket – Hepsi Dahil</div>
+          <div class="prod-desc">Kitap 1+2, föyler, denemeler ve soru bankası. Geometride tam hakimiyet.</div>
+          <ul class="prod-includes">
+            <li>2 kitap + 20 föy</li>
+            <li>5 deneme sınavı</li>
+            <li>400 soruluk banka</li>
+            <li>Yeni içerik güncellemeleri</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺399 <sub>/paket</sub></div>
+            <button class="buy-btn" onclick="openModal('Geometri Tam Paket','₺399','Tüm geometri materyalleri tam paket.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── IQ / MANTIK ── -->
+  <div class="cat-panel" id="panel-iq">
+    <div class="cat-hero ch-iq reveal">
+      <div class="cat-hero-text">
+        <h2>IQ / Mantık Setleri</h2>
+        <p>Sembol-harf şifreleri, sayı dizileri, matris soruları ve mantıksal çıkarım. YÖS'te en fazla sorulan soru tipleri için özel hazırlık.</p>
+      </div>
+      <div class="cat-hero-icon">🧠</div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <div class="product-visual pv-iq1">📗<span class="prod-badge new">YENİ</span></div>
+        <div class="product-body">
+          <div class="prod-type">Konu Anlatımlı Kitap</div>
+          <div class="prod-name">IQ Kitap 1 – Sembol & Şifre Soruları</div>
+          <div class="prod-desc">Harf şifreleri, sembol-kelime eşleştirme, yön analizleri. YÖS IQ bölümünün temeli.</div>
+          <ul class="prod-includes">
+            <li>160 sayfa PDF kitap</li>
+            <li>Çözüm tekniği adım adım</li>
+            <li>100+ örnek çözüm</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺149 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('IQ Kitap 1','₺149','Sembol ve şifre soruları konu anlatımlı kitap.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card featured reveal">
+        <div class="product-visual pv-iq2">📘<span class="prod-badge hot">POPÜLER</span></div>
+        <div class="product-body">
+          <div class="prod-type">Konu Anlatımlı Kitap</div>
+          <div class="prod-name">IQ Kitap 2 – Sayı Dizileri & Matris</div>
+          <div class="prod-desc">Sayı örüntüleri, kelime-sayı dizileri, matris soruları ve tablo analizi teknikleri.</div>
+          <ul class="prod-includes">
+            <li>175 sayfa PDF kitap</li>
+            <li>Dizi bulma teknikleri</li>
+            <li>Matris çözüm algoritması</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺149 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('IQ Kitap 2','₺149','Sayı dizileri ve matris soruları kitabı.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-iq1">📑</div>
+        <div class="product-body">
+          <div class="prod-type">Konu Föyleri</div>
+          <div class="prod-name">IQ Konu Föyleri – Tam Set</div>
+          <div class="prod-desc">Her soru tipi için çözüm adımları özeti. Sınav günü el altında bulundurulacak rehber.</div>
+          <ul class="prod-includes">
+            <li>18 ayrı konu föyü</li>
+            <li>Çözüm akış şemaları</li>
+            <li>Sık hata uyarıları</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺89 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('IQ Föyleri','₺89','18 IQ konu föyü PDF seti.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-iq2">📝</div>
+        <div class="product-body">
+          <div class="prod-type">Deneme Sınavı</div>
+          <div class="prod-name">IQ Denemesi – 5'li Set</div>
+          <div class="prod-desc">YÖS formatında 5 IQ denemesi. Her biri 15 soruluk, gerçek sınav atmosferinde.</div>
+          <ul class="prod-includes">
+            <li>5 × 15 soru = 75 soru</li>
+            <li>Tüm sorular çözümlü</li>
+            <li>Süre takip rehberi</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺119 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('IQ Denemesi','₺119','5 IQ deneme sınavı PDF seti.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-iq3">🎯</div>
+        <div class="product-body">
+          <div class="prod-type">Soru Bankası</div>
+          <div class="prod-name">IQ Soru Bankası – 600 Soru</div>
+          <div class="prod-desc">Tüm IQ soru tiplerinden 600 özgün soru ve detaylı çözümleri. En kapsamlı set.</div>
+          <ul class="prod-includes">
+            <li>600 özgün soru</li>
+            <li>8 soru tipine göre ayrılmış</li>
+            <li>Zorluk bazlı sıralama</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺219 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('IQ Soru Bankası','₺219','600 soru IQ bankası PDF.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-iq1">📦<span class="prod-badge" style="background:var(--gold);">FIRSAT</span></div>
+        <div class="product-body">
+          <div class="prod-type">Tam Paket</div>
+          <div class="prod-name">IQ Tam Paket – Hepsi Dahil</div>
+          <div class="prod-desc">Kitap 1+2, föyler, denemeler ve soru bankası. IQ bölümünde tam puan hedefleyenler için.</div>
+          <ul class="prod-includes">
+            <li>2 kitap + 18 föy</li>
+            <li>5 IQ denemesi</li>
+            <li>600 soruluk banka</li>
+            <li>Yeni içerik güncellemeleri</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺449 <sub>/paket</sub></div>
+            <button class="buy-btn" onclick="openModal('IQ Tam Paket','₺449','Tüm IQ materyalleri tam paket.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DENEMELER ── -->
+  <div class="cat-panel" id="panel-denemeler">
+    <div class="cat-hero ch-den reveal">
+      <div class="cat-hero-text">
+        <h2>Deneme Sınavları</h2>
+        <p>Tam YÖS formatında hazırlanmış çözümlü deneme sınavları. Matematik + Geometri + IQ bölümleri birlikte, gerçek sınav deneyimi.</p>
+      </div>
+      <div class="cat-hero-icon">📋</div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <div class="product-visual pv-den1">📋<span class="prod-badge new">2026</span></div>
+        <div class="product-body">
+          <div class="prod-type">Tam YÖS Denemesi</div>
+          <div class="prod-name">YÖS 2026 Deneme – 3'lü Set</div>
+          <div class="prod-desc">2026 sınav formatına uygun 3 tam deneme. Güncel soru tipleri ve ağırlık dağılımı.</div>
+          <ul class="prod-includes">
+            <li>3 × 80 soru tam deneme</li>
+            <li>Mat + Geo + IQ birlikte</li>
+            <li>Tüm sorular çözümlü</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺199 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('YÖS 2026 Deneme 3\'lü','₺199','3 tam YÖS denemesi PDF seti.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card featured reveal">
+        <div class="product-visual pv-den2">🏆<span class="prod-badge hot">EN ÇOK SATAN</span></div>
+        <div class="product-body">
+          <div class="prod-type">Tam YÖS Denemesi</div>
+          <div class="prod-name">YÖS 2026 Deneme – 10'lu Mega Set</div>
+          <div class="prod-desc">10 tam deneme, kapsamlı performans analizi. Sınava hazırlığın son aşaması için.</div>
+          <ul class="prod-includes">
+            <li>10 × 80 soru = 800 soru</li>
+            <li>Performans takip tablosu</li>
+            <li>Konu bazlı hata analizi</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺499 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('YÖS 2026 Mega Set','₺499','10 tam deneme sınavı mega seti.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-den1">📐</div>
+        <div class="product-body">
+          <div class="prod-type">Konu Bazlı Deneme</div>
+          <div class="prod-name">Matematik Odaklı Deneme – 5'li</div>
+          <div class="prod-desc">Matematik sorularının yoğun olduğu 5 özel deneme. Matematik puanını artırmak isteyenler için.</div>
+          <ul class="prod-includes">
+            <li>5 × 40 matematik sorusu</li>
+            <li>Konu bazlı ağırlıklandırma</li>
+            <li>Zaman yönetimi rehberi</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺179 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('Mat Odaklı Deneme','₺179','5 matematik odaklı deneme PDF.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-den2">🧠</div>
+        <div class="product-body">
+          <div class="prod-type">Konu Bazlı Deneme</div>
+          <div class="prod-name">IQ Odaklı Deneme – 5'li</div>
+          <div class="prod-desc">IQ ve mantık sorularının yoğun olduğu 5 özel deneme. Sembol ve şifre uzmanı ol.</div>
+          <ul class="prod-includes">
+            <li>5 × 40 IQ sorusu</li>
+            <li>Tüm IQ tipleri kapsanmış</li>
+            <li>Süre stratejisi rehberi</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺179 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('IQ Odaklı Deneme','₺179','5 IQ odaklı deneme PDF.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-den3">📊</div>
+        <div class="product-body">
+          <div class="prod-type">Analiz Paketi</div>
+          <div class="prod-name">Deneme Analiz Seti – Hata Takibi</div>
+          <div class="prod-desc">5 deneme + detaylı hata analiz tabloları. Nerede hata yaptığını bul, odaklan, geliş.</div>
+          <ul class="prod-includes">
+            <li>5 deneme sınavı</li>
+            <li>Konu bazlı hata formu</li>
+            <li>Çalışma planı şablonu</li>
+            <li>Anında indirme linki</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺249 <sub>/PDF</sub></div>
+            <button class="buy-btn" onclick="openModal('Deneme Analiz Seti','₺249','5 deneme + hata analiz tabloları.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-visual pv-den1">📦<span class="prod-badge" style="background:var(--gold);">FIRSAT</span></div>
+        <div class="product-body">
+          <div class="prod-type">Tam Paket</div>
+          <div class="prod-name">Deneme Tam Paket – Tüm Setler</div>
+          <div class="prod-desc">Tüm deneme setleri tek pakette. Mat odaklı + IQ odaklı + tam YÖS denemeleri.</div>
+          <ul class="prod-includes">
+            <li>23 deneme sınavı toplamda</li>
+            <li>Hata analiz araçları</li>
+            <li>Puan simülasyon tablosu</li>
+            <li>Yeni deneme güncellemeleri</li>
+          </ul>
+          <div class="prod-footer">
+            <div class="prod-price">₺699 <sub>/paket</sub></div>
+            <button class="buy-btn" onclick="openModal('Deneme Tam Paket','₺699','Tüm deneme setlerini içeren mega paket.')">Satın Al</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="paket-banner reveal">
+      <div class="pb-text"><h3>Her Şey Dahil – Süper Paket</h3><p>Matematik, Geometri, IQ ve Denemeler — tüm kategorilerin tam paketleri tek seferde. YÖS'e %100 hazır ol.</p></div>
+      <div class="pb-price"><div class="old">₺1.796</div><div class="new-p">₺999</div><div class="save">%44 Tasarruf</div></div>
+      <button class="btn-primary" onclick="openModal('Süper Paket – Her Şey Dahil','₺999','4 kategorinin tüm materyalleri.')">Süper Paket Al</button>
+    </div>
+  </div>
+
+</div><!-- /store-main -->
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div><span class="footer-logo">Yösarete</span><p class="footer-desc">YÖS hazırlığı için Türkiye'nin en kapsamlı soru bankası platformu.</p></div>
+    <div class="footer-col"><h4>Sayfalar</h4><a href="index.html">Ana Sayfa</a><a href="sondakika.html">Son Dakika</a><a href="nethesapla.html">Net Hesapla</a><a href="universiteler.html">Üniversiteler</a></div>
+    <div class="footer-col"><h4>Mağaza</h4><a href="#matematik" onclick="switchCat('matematik',document.getElementById('tab-matematik'))">Matematik</a><a href="#geometri" onclick="switchCat('geometri',document.getElementById('tab-geometri'))">Geometri</a><a href="#iq" onclick="switchCat('iq',document.getElementById('tab-iq'))">IQ / Mantık</a><a href="#denemeler" onclick="switchCat('denemeler',document.getElementById('tab-denemeler'))">Denemeler</a></div>
+    <div class="footer-col"><h4>İletişim</h4><a href="https://youtube.com/@yosaret" target="_blank">YouTube</a><a href="#">Instagram</a><a href="index.html#iletisim">E-posta</a></div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 Yösarete · Tüm hakları saklıdır</span><span><a href="#">Gizlilik</a> · <a href="#">İade Politikası</a></span></div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3 id="mTitle"></h3>
+    <div class="modal-price" id="mPrice"></div>
+    <div class="modal-info">📄 Bu ürün PDF formatında dijital teslim edilir. Satın alma işleminin ardından e-posta adresinize indirme linki gönderilecektir.</div>
+    <p id="mDesc"></p>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">Vazgeç</button>
+      <button class="modal-pay" onclick="closeModal()">💳 Ödemeye Geç →</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /page-content -->
+
+<script>
+function switchCat(cat, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.cat-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+cat).classList.add('active');
+  window.scrollTo({top: document.querySelector('.tab-bar').offsetTop - 20, behavior:'smooth'});
+  triggerReveal();
+}
+function openModal(title, price, desc) {
+  document.getElementById('mTitle').textContent = title;
+  document.getElementById('mPrice').textContent = price;
+  document.getElementById('mDesc').textContent = desc;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function triggerReveal() {
+  setTimeout(()=>{
+    document.querySelectorAll('.reveal:not(.in)').forEach((r,i)=>setTimeout(()=>r.classList.add('in'),i*60));
+  },50);
+}
+// Hash routing
+const hash = location.hash.replace('#','');
+if(['matematik','geometri','iq','denemeler'].includes(hash)) {
+  switchCat(hash, document.getElementById('tab-'+hash));
+}
+// Scroll reveal
+const obs=new IntersectionObserver(entries=>entries.forEach((e,i)=>{
+  if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*70);obs.unobserve(e.target);}
+}),{threshold:.07});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>
