@@ -1,46 +1,59 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YÖS ARETE | TR-YÖS Eğitim Portalı</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* MOR TEMA RENKLERİ */
-            --primary: #9333ea; /* Parlak Mor */
-            --primary-dark: #7e22ce; /* Koyu Mor */
-            --secondary: #3b0764; /* Çok Koyu Mor / Gece */
-            --accent: #d8b4fe; /* Açık Mor */
-            --bg-color: #faf5ff; /* Çok Açık Mor (Arkaplan) */
+            --primary: #9333ea;
+            --primary-dark: #7e22ce;
+            --secondary: #3b0764;
+            --accent: #d8b4fe;
+            --bg-color: #faf5ff;
             --text-main: #334155;
             --white: #ffffff;
             --shadow: 0 10px 25px -5px rgba(147, 51, 234, 0.15), 0 8px 10px -6px rgba(147, 51, 234, 0.1);
             --transition: all 0.3s ease;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; font-family: 'Poppins', sans-serif; transition: background-color 0.3s; }
+        
+        /* RTL (Arapça) CSS Desteği */
+        html[dir="rtl"] body { font-family: 'Cairo', sans-serif; }
+        html[dir="rtl"] .uni-item { border-left: 1px solid #e2e8f0; border-right: 4px solid var(--primary); }
+        html[dir="rtl"] .lang-switch { border-left: none; border-right: 2px solid #f3e8ff; padding-left: 0; padding-right: 15px; }
+        html[dir="rtl"] .cat-badge { right: auto; left: -30px; transform: rotate(-45deg); }
+        html[dir="rtl"] .uni-action-btn { margin-right: 0; margin-left: 10px; }
+        html[dir="rtl"] .calc-info { border-left: none; border-right: 4px solid var(--primary); }
 
-        /* --- Son Dakika Kayan Yazı --- */
-        .top-bar { background: var(--secondary); color: var(--white); display: flex; align-items: center; border-bottom: 3px solid var(--primary); }
-        .top-bar-title { background: var(--primary); padding: 8px 20px; font-weight: 700; z-index: 10; font-size: 0.9rem; letter-spacing: 1px; white-space: nowrap; }
+        /* --- Üst Bar --- */
+        .top-bar { background: var(--secondary); color: var(--white); display: flex; align-items: center; border-bottom: 3px solid var(--primary); direction: ltr; }
+        .top-bar-title { background: var(--primary); padding: 8px 20px; font-weight: 700; z-index: 10; font-size: 0.9rem; white-space: nowrap; }
         .ticker-wrap { flex-grow: 1; overflow: hidden; white-space: nowrap; padding: 8px 0; }
         .ticker-move { display: inline-block; animation: ticker 25s linear infinite; font-size: 0.9rem; }
-        .ticker-move a { color: #fde047; text-decoration: none; font-weight: 600; margin: 0 20px; border-bottom: 1px dashed transparent; transition: 0.3s;}
-        .ticker-move a:hover { color: var(--white); border-color: var(--white); }
+        .ticker-move a { color: #fde047; text-decoration: none; font-weight: 600; margin: 0 20px; transition: 0.3s;}
+        .ticker-move a:hover { color: var(--white); }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* --- Üst Menü (Navbar) --- */
+        /* --- Menü ve Dil Seçici --- */
         header { background-color: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #f3e8ff;}
-        .nav-container { max-width: 1200px; margin: 0 auto; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .logo { font-size: 24px; font-weight: 800; color: var(--secondary); text-decoration: none; display: flex; align-items: center; gap: 10px; }
         .logo i { color: var(--primary); font-size: 28px; }
         
-        nav ul { display: flex; gap: 5px; list-style: none; }
+        .nav-center { flex-grow: 1; display: flex; justify-content: center; }
+        nav ul { display: flex; gap: 5px; list-style: none; flex-wrap: wrap; justify-content: center; }
         nav a { text-decoration: none; color: var(--text-main); font-weight: 600; cursor: pointer; padding: 8px 16px; border-radius: 8px; transition: var(--transition); font-size: 0.95rem; }
         nav a:hover, nav a.active { background-color: var(--primary); color: var(--white); }
+
+        .lang-switch { display: flex; gap: 5px; border-left: 2px solid #f3e8ff; padding-left: 15px; }
+        .lang-btn { background: #f8fafc; border: 1px solid #e2e8f0; cursor: pointer; font-weight: 700; color: var(--secondary); padding: 6px 12px; border-radius: 6px; transition: 0.2s; font-size: 0.85rem; }
+        .lang-btn.active, .lang-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
         /* --- Ana İçerik --- */
         main { max-width: 1200px; margin: 40px auto; padding: 0 20px; min-height: 70vh; }
@@ -49,44 +62,58 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         .section-title { font-size: 28px; color: var(--secondary); border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-bottom: 30px; display: inline-block; font-weight: 800; }
 
-        /* --- Grid & Kartlar --- */
         .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
         .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
         
-        .card { background: var(--white); border-radius: 12px; padding: 30px; box-shadow: var(--shadow); transition: var(--transition); border: 1px solid #f3e8ff; }
+        .card { background: var(--white); border-radius: 12px; padding: 30px; box-shadow: var(--shadow); transition: var(--transition); border: 1px solid #f3e8ff; cursor: pointer; }
         .card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 20px 25px -5px rgba(147, 51, 234, 0.2); }
 
-        .btn { display: inline-block; padding: 12px 25px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: var(--white); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; text-align: center; width: 100%; font-size: 1rem; }
+        .btn { display: inline-block; padding: 12px 25px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: var(--white); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; text-align: center; font-size: 1rem; }
         .btn:hover { background: var(--secondary); box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4); }
 
         /* --- Puan Hesaplama Aracı --- */
         .calc-form { background: var(--white); padding: 40px; border-radius: 16px; box-shadow: var(--shadow); max-width: 800px; margin: 0 auto; border-top: 5px solid var(--primary); }
-        .calc-info { background: #faf5ff; border-left: 4px solid var(--primary); padding: 15px; border-radius: 4px; font-size: 0.9rem; color: var(--secondary); margin-bottom: 30px; }
+        .calc-info { background: #faf5ff; border-radius: 8px; padding: 15px; font-size: 0.9rem; color: #475569; margin-bottom: 30px; border: 1px solid #e9d5ff; border-left: 4px solid var(--primary); }
         .input-group { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed #e2e8f0; }
-        .input-group strong { font-size: 1.1rem; color: var(--secondary); width: 40%; }
-        .input-group strong span { display: block; font-size: 0.8rem; color: #64748b; font-weight: normal; margin-top: 5px; }
-        .inputs-wrapper { display: flex; gap: 15px; width: 60%; }
+        .input-group strong { font-size: 1.1rem; color: var(--secondary); width: 45%; }
+        .inputs-wrapper { display: flex; gap: 15px; width: 55%; }
         .inputs-wrapper div { text-align: center; flex: 1; }
         .inputs-wrapper label { display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 5px; font-weight: 600; }
         .inputs-wrapper input { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; text-align: center; font-weight: bold; font-size: 1.2rem; outline: none; transition: 0.3s; color: var(--secondary); }
-        .inputs-wrapper input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2); }
+        .inputs-wrapper input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1); }
         
         #calc-result { margin-top: 30px; padding: 30px; background: #faf5ff; border-radius: 12px; border: 2px dashed var(--primary); display: none; text-align: center; }
         #score-text { font-size: 3.5rem; color: var(--primary-dark); font-weight: 800; line-height: 1; margin: 10px 0; }
-        .formula-box { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e9d5ff; text-align: left; font-size: 0.85rem; color: #64748b; }
 
-        /* --- Üniversiteler (Canlı Arama) --- */
+        /* --- Üniversiteler (Akıllı Akordeon) --- */
         .search-box { width: 100%; padding: 15px 20px; font-size: 1.1rem; border: 2px solid #d8b4fe; border-radius: 8px; margin-bottom: 25px; outline: none; transition: 0.3s; }
-        .search-box:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2); }
-        .uni-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; max-height: 500px; overflow-y: auto; padding-right: 10px; }
-        .uni-grid::-webkit-scrollbar { width: 6px; }
-        .uni-grid::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
-        .uni-item { background: var(--white); padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-weight: 600; color: var(--secondary); display: flex; align-items: center; gap: 10px; transition: 0.2s; border-left: 4px solid var(--primary); }
-        .uni-item:hover { transform: translateX(5px); border-color: var(--primary); background: #faf5ff; }
+        .search-box:focus { border-color: var(--primary); }
+        .uni-grid { display: flex; flex-direction: column; gap: 15px; }
+        
+        .uni-item { background: var(--white); border-radius: 8px; border: 1px solid #e2e8f0; border-left: 4px solid var(--primary); transition: 0.3s; overflow: hidden; cursor: pointer; }
+        .uni-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; font-weight: 600; color: var(--secondary); background: #fff; transition: 0.3s;}
+        .uni-header:hover { background: #faf5ff; }
+        .icon-arrow { color: #94a3b8; transition: transform 0.3s ease; }
+        
+        /* Akordeon Kapalı/Açık Durumu */
+        .uni-body { max-height: 0; padding: 0 20px; opacity: 0; transition: all 0.3s ease; font-size: 0.95rem; color: #475569; overflow: hidden; }
+        .uni-item.active { border-color: var(--primary); background: #faf5ff; box-shadow: 0 5px 15px rgba(147, 51, 234, 0.1); }
+        .uni-item.active .uni-body { max-height: 300px; padding: 15px 20px 20px 20px; opacity: 1; border-top: 1px dashed #d8b4fe; margin-top: 5px; }
+        .uni-item.active .uni-header { background: #faf5ff; }
+        .uni-item.active .icon-arrow { transform: rotate(180deg); color: var(--primary); }
+        
+        .uni-body p { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .uni-body i.icon-info { color: var(--primary); width: 20px; text-align: center; }
+        .uni-body a { color: var(--primary); font-weight: 600; text-decoration: none; word-break: break-all; }
+        
+        .uni-action-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--primary); color: white; padding: 10px 15px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; transition: 0.3s; margin-top: 10px; margin-right: 10px; font-weight: 600; border: 1px solid var(--primary); }
+        .uni-action-btn:hover { background: var(--secondary); border-color: var(--secondary); color: white;}
+        .uni-action-btn.outline { background: transparent; color: var(--primary); }
+        .uni-action-btn.outline:hover { background: var(--primary); color: white; }
 
         /* --- Mağaza --- */
-        .store-category { font-size: 1.5rem; color: var(--secondary); margin: 40px 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; gap: 10px; }
-        .product-card { position: relative; overflow: hidden; text-align: center; padding: 25px 20px; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
+        .store-category { font-size: 1.5rem; color: var(--secondary); margin: 40px 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; }
+        .product-card { position: relative; overflow: hidden; text-align: center; padding: 25px 20px; display: flex; flex-direction: column; justify-content: space-between; height: 100%; cursor: default; }
         .product-icon { font-size: 3rem; color: var(--primary); margin-bottom: 15px; }
         .price { font-size: 1.3rem; font-weight: 800; color: var(--secondary); margin: 15px 0; }
         .cat-badge { position: absolute; top: 15px; right: -30px; background: var(--secondary); color: white; padding: 5px 30px; font-size: 0.75rem; font-weight: 700; transform: rotate(45deg); letter-spacing: 1px; }
@@ -95,9 +122,9 @@
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin-bottom: 15px; box-shadow: var(--shadow); border: 2px solid #f3e8ff; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .nav-container { flex-direction: column; gap: 15px; }
-            nav ul { flex-wrap: wrap; justify-content: center; }
+            .lang-switch { border: none; padding: 0; }
             .input-group { flex-direction: column; align-items: flex-start; gap: 15px; }
             .input-group strong, .inputs-wrapper { width: 100%; }
         }
@@ -106,12 +133,10 @@
 <body>
 
     <div class="top-bar">
-        <div class="top-bar-title"><i class="fa-solid fa-bullhorn"></i> DUYURULAR</div>
+        <div class="top-bar-title" data-i18n="announce"><i class="fa-solid fa-bullhorn"></i> DUYURULAR</div>
         <div class="ticker-wrap">
-            <span class="ticker-move">
-                📢 <a href="https://www.osym.gov.tr/TR,25372/turkiye-yurt-disindan-ogrenci-kabul-sinavi-tr-yos.html" target="_blank">TR-YÖS Kılavuzu ve Resmi Duyurular İçin ÖSYM Sayfasına Git <i class="fa-solid fa-arrow-up-right-from-square"></i></a> • 
-                🎓 <a href="https://www.yok.gov.tr/Sayfalar/Haberler/Haberler.aspx" target="_blank">YÖK Yabancı Uyruklu Öğrenci Kararları İçin Tıklayın <i class="fa-solid fa-arrow-up-right-from-square"></i></a> • 
-                📚 <a href="#" onclick="showSection('store')">YÖS ARETE Matematik, Geometri, IQ Föyleri ve Denemeleri Mağazaya Eklendi!</a>
+            <span class="ticker-move" data-i18n="ticker">
+                📢 <a href='https://www.osym.gov.tr/' target='_blank'>TR-YÖS Kılavuzu ve Resmi Duyurular İçin ÖSYM Sayfasına Git <i class='fa-solid fa-arrow-up-right-from-square'></i></a> • 🎓 <a href='https://www.yok.gov.tr/' target='_blank'>YÖK Yabancı Uyruklu Öğrenci Kararları İçin Tıklayın <i class='fa-solid fa-arrow-up-right-from-square'></i></a>
             </span>
         </div>
     </div>
@@ -121,252 +146,198 @@
             <a href="#" class="logo" onclick="showSection('home')">
                 <i class="fa-solid fa-graduation-cap"></i> YÖS ARETE
             </a>
-            <nav>
-                <ul id="nav-menu">
-                    <li><a class="active" onclick="showSection('home')">Ana Sayfa</a></li>
-                    <li><a onclick="showSection('calc')">ÖSYM Puan Hesapla</a></li>
-                    <li><a onclick="showSection('unis')">Üniversiteler</a></li>
-                    <li><a onclick="showSection('store')"><i class="fa-solid fa-cart-shopping"></i> Mağaza (PDF)</a></li>
-                    <li><a onclick="showSection('videos')"><i class="fa-brands fa-youtube" style="color: #ff0000;"></i> Videolar</a></li>
-                </ul>
-            </nav>
+            <div class="nav-center">
+                <nav>
+                    <ul id="nav-menu">
+                        <li><a class="active" onclick="showSection('home')" data-i18n="nav_home">Ana Sayfa</a></li>
+                        <li><a onclick="showSection('calc')" data-i18n="nav_calc">Puan Hesapla</a></li>
+                        <li><a onclick="showSection('unis')" data-i18n="nav_unis">Üniversiteler</a></li>
+                        <li><a onclick="showSection('store')" data-i18n="nav_store"><i class="fa-solid fa-cart-shopping"></i> Mağaza</a></li>
+                        <li><a onclick="showSection('videos')" data-i18n="nav_videos"><i class="fa-brands fa-youtube" style="color: red;"></i> Videolar</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="lang-switch">
+                <button id="btn-tr" class="lang-btn active" onclick="setLang('tr')">TR</button>
+                <button id="btn-en" class="lang-btn" onclick="setLang('en')">EN</button>
+                <button id="btn-ar" class="lang-btn" onclick="setLang('ar')">AR</button>
+                <button id="btn-az" class="lang-btn" onclick="setLang('az')">AZ</button>
+            </div>
         </div>
     </header>
 
     <main>
         <section id="home" class="section active">
             <div style="text-align: center; padding: 80px 20px; background: linear-gradient(rgba(59, 7, 100, 0.85), rgba(59, 7, 100, 0.95)), url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2000') center/cover; color: white; border-radius: 16px; margin-bottom: 50px;">
-                <h1 style="font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 20px; font-weight: 800; line-height: 1.2;">TR-YÖS'te Zirveyi Hedefleyenlerin<br><span style="color: var(--accent);">Tek Adresi</span></h1>
-                <p style="font-size: 1.1rem; max-width: 700px; margin: 0 auto 30px; color: #e9d5ff;">ÖSYM algoritmasına tam uyumlu puan hesaplama motoru, üniversite listeleri ve kopyalanamaz akıllı PDF eğitim setlerimizle çalışmaya hemen başla.</p>
-                <button class="btn" style="width: auto; padding: 15px 40px; font-size: 1.1rem; margin-right: 15px; margin-bottom: 10px;" onclick="showSection('store')">PDF Mağazasını İncele</button>
-                <button class="btn" style="background: white; color: var(--secondary); width: auto; padding: 15px 40px; font-size: 1.1rem;" onclick="showSection('calc')">Puan Hesapla</button>
+                <h1 style="font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 20px; font-weight: 800; line-height: 1.2;" data-i18n="hero_title">TR-YÖS'te Zirveyi Hedefleyenlerin<br><span style="color: var(--accent);">Tek Adresi</span></h1>
+                <p style="font-size: 1.1rem; max-width: 700px; margin: 0 auto 30px; color: #e9d5ff;" data-i18n="hero_desc">ÖSYM algoritmasına tam uyumlu puan hesaplama motoru, üniversite listeleri ve kopyalanamaz akıllı PDF eğitim setlerimizle çalışmaya hemen başla.</p>
+                <button class="btn" style="width: auto; padding: 15px 40px; margin-right: 10px; margin-bottom: 10px;" onclick="showSection('store')" data-i18n="btn_store">PDF Mağazasını İncele</button>
+                <button class="btn" style="background: white; color: var(--secondary); width: auto; padding: 15px 40px;" onclick="showSection('calc')" data-i18n="btn_calc">Puan Hesapla</button>
             </div>
 
             <div class="grid-3">
-                <div class="card" style="text-align: center; cursor: pointer;" onclick="showSection('calc')">
+                <div class="card" onclick="showSection('calc')">
                     <i class="fa-solid fa-calculator" style="font-size: 45px; color: var(--primary); margin-bottom: 20px;"></i>
-                    <h3 style="color: var(--secondary);">TR-YÖS Simülasyonu</h3>
-                    <p style="color: #64748b; font-size: 0.9rem;">ÖSYM'nin standart sapma ve ağırlıklı puan sistemine (100-500 Ölçeği) birebir uygun hesaplama motoru.</p>
+                    <h3 style="color: var(--secondary);" data-i18n="card_calc">TR-YÖS Simülasyonu</h3>
+                    <p style="color: #64748b; font-size: 0.9rem; margin-top: 10px;" data-i18n="card_calc_desc">ÖSYM'nin standart sapma ve ağırlıklı puan sistemine birebir uygun hesaplama motoru.</p>
                 </div>
-                <div class="card" style="text-align: center; cursor: pointer; border-bottom: 4px solid var(--primary);" onclick="showSection('store')">
+                <div class="card" onclick="showSection('store')" style="border-bottom: 4px solid var(--primary);">
                     <i class="fa-solid fa-shield-halved" style="font-size: 45px; color: var(--primary); margin-bottom: 20px;"></i>
-                    <h3 style="color: var(--secondary);">Güvenli PDF Mağazası</h3>
-                    <p style="color: #64748b; font-size: 0.9rem;">Kişiye özel T.C. Kimlik filigranlı Matematik, Geometri ve IQ föyleri ile Soru Bankaları.</p>
+                    <h3 style="color: var(--secondary);" data-i18n="card_store">Güvenli PDF Mağazası</h3>
+                    <p style="color: #64748b; font-size: 0.9rem; margin-top: 10px;" data-i18n="card_store_desc">Kişiye özel T.C. Kimlik filigranlı Matematik, Geometri ve IQ föyleri.</p>
                 </div>
-                <div class="card" style="text-align: center; cursor: pointer;" onclick="showSection('unis')">
+                <div class="card" onclick="showSection('unis')">
                     <i class="fa-solid fa-building-columns" style="font-size: 45px; color: var(--primary); margin-bottom: 20px;"></i>
-                    <h3 style="color: var(--secondary);">Üniversite Rehberi</h3>
-                    <p style="color: #64748b; font-size: 0.9rem;">Türkiye genelinde YÖS ile öğrenci kabul eden 48 prestijli üniversitenin güncel listesi.</p>
+                    <h3 style="color: var(--secondary);" data-i18n="card_uni">Üniversite Rehberi</h3>
+                    <p style="color: #64748b; font-size: 0.9rem; margin-top: 10px;" data-i18n="card_uni_desc">Türkiye genelinde YÖS ile öğrenci kabul eden prestijli üniversitelerin güncel listesi.</p>
                 </div>
             </div>
         </section>
 
         <section id="calc" class="section">
-            <h2 class="section-title">ÖSYM Kılavuzuna Göre TR-YÖS Puanı Hesapla</h2>
+            <h2 class="section-title" data-i18n="calc_title">ÖSYM Kılavuzuna Göre TR-YÖS Puanı Hesapla</h2>
             <div class="calc-form">
-                <div class="calc-info">
-                    <strong><i class="fa-solid fa-circle-info"></i> Hesaplama Altyapısı (ÖSYM Kılavuzu)</strong><br>
-                    • 4 Yanlış 1 Doğruyu götürür.<br>
-                    • Adayın hesaplama yapılabilmesi için testlerin <strong>en az birinden 0.5 ham puan</strong> alması zorunludur.<br>
-                    • Ağırlıklı Puan = (%45 x Sayısal Yetenek/IQ T-Puanı) + (%55 x Temel Matematik T-Puanı).<br>
-                    • Çıkan sonuç ÖSYM'nin <strong>100 - 500</strong> ölçeğine dönüştürülür. <em>(Arka planda geçmiş yıllara ait tahmini Türkiye ortalaması ve standart sapma simülasyonu çalışır).</em>
+                <div class="calc-info" data-i18n="calc_info">
+                    <strong><i class='fa-solid fa-circle-info'></i> Hesaplama Altyapısı (ÖSYM Kılavuzu)</strong><br>• 4 Yanlış 1 Doğruyu götürür.<br>• Adayın hesaplama yapılabilmesi için testlerin <strong>en az birinden 0.5 ham puan</strong> alması zorunludur.<br>• Çıkan sonuç ÖSYM'nin <strong>100 - 500</strong> ölçeğine dönüştürülür.
                 </div>
                 
                 <div class="input-group">
-                    <strong>Sayısal Yetenek (IQ) <span>Toplam 40 Soru</span></strong>
+                    <strong><span data-i18n="iq_label">Sayısal Yetenek (IQ)</span> <span style="display:block; font-size:0.8rem; font-weight:normal; margin-top:5px; color:#64748b;" data-i18n="iq_desc">Toplam 40 Soru</span></strong>
                     <div class="inputs-wrapper">
-                        <div><label>DOĞRU</label><input type="number" id="iqD" min="0" max="40" value="0"></div>
-                        <div><label>YANLIŞ</label><input type="number" id="iqY" min="0" max="40" value="0"></div>
+                        <div><label data-i18n="correct">DOĞRU</label><input type="number" id="iqD" min="0" max="40" value="0"></div>
+                        <div><label data-i18n="wrong">YANLIŞ</label><input type="number" id="iqY" min="0" max="40" value="0"></div>
                     </div>
                 </div>
 
                 <div class="input-group">
-                    <strong>Matematik <span>Toplam 30 Soru</span></strong>
+                    <strong><span data-i18n="mat_label">Matematik</span> <span style="display:block; font-size:0.8rem; font-weight:normal; margin-top:5px; color:#64748b;" data-i18n="mat_desc">Toplam 30 Soru</span></strong>
                     <div class="inputs-wrapper">
-                        <div><label>DOĞRU</label><input type="number" id="matD" min="0" max="30" value="0"></div>
-                        <div><label>YANLIŞ</label><input type="number" id="matY" min="0" max="30" value="0"></div>
+                        <div><label data-i18n="correct">DOĞRU</label><input type="number" id="matD" min="0" max="30" value="0"></div>
+                        <div><label data-i18n="wrong">YANLIŞ</label><input type="number" id="matY" min="0" max="30" value="0"></div>
                     </div>
                 </div>
                 
                 <div class="input-group" style="border: none;">
-                    <strong>Geometri <span>Toplam 10 Soru</span></strong>
+                    <strong><span data-i18n="geo_label">Geometri</span> <span style="display:block; font-size:0.8rem; font-weight:normal; margin-top:5px; color:#64748b;" data-i18n="geo_desc">Toplam 10 Soru</span></strong>
                     <div class="inputs-wrapper">
-                        <div><label>DOĞRU</label><input type="number" id="geoD" min="0" max="10" value="0"></div>
-                        <div><label>YANLIŞ</label><input type="number" id="geoY" min="0" max="10" value="0"></div>
+                        <div><label data-i18n="correct">DOĞRU</label><input type="number" id="geoD" min="0" max="10" value="0"></div>
+                        <div><label data-i18n="wrong">YANLIŞ</label><input type="number" id="geoY" min="0" max="10" value="0"></div>
                     </div>
                 </div>
 
-                <button class="btn" style="padding: 16px; font-size: 1.2rem; margin-top: 20px;" onclick="hesapla()">Puanımı Hesapla</button>
+                <button class="btn" style="width:100%; padding:16px; font-size:1.2rem; margin-top:20px;" onclick="hesapla()" data-i18n="btn_calc_submit">Puanımı Hesapla</button>
 
                 <div id="calc-result">
-                    <p style="font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 1px;">Ölçeklenmiş TR-YÖS Puanınız</p>
+                    <p style="font-weight: 700; color: var(--secondary); text-transform: uppercase;" data-i18n="result_title">Ölçeklenmiş TR-YÖS Puanınız</p>
                     <div id="score-text">0.00</div>
                     <p id="net-text" style="color: var(--primary-dark); font-weight: 600; font-size: 1.1rem;"></p>
-                    
-                    <div class="formula-box">
-                        <strong>Not:</strong> Gerçek standart sapma değerleri sınava giren tüm adayların ortalamasına göre belirlenir. Bu hesaplama aracı gerçeğe en yakın simülasyonu sunar.
-                    </div>
                 </div>
             </div>
         </section>
 
         <section id="unis" class="section">
-            <h2 class="section-title">YÖS İle Öğrenci Alan Üniversiteler</h2>
-            <p style="color: #64748b; margin-bottom: 20px;">Sistemimizde kayıtlı 48 üniversite aşağıda listelenmiştir. İlgilendiğiniz üniversiteyi hızlıca bulmak için arama kutusunu kullanabilirsiniz.</p>
+            <h2 class="section-title" data-i18n="uni_title">YÖS İle Öğrenci Alan Üniversiteler</h2>
+            <p style="color: #64748b; margin-bottom: 20px;" data-i18n="uni_desc">Aşağıdaki listeden üniversite isimlerine tıklayarak iletişim adreslerine ve resmi YÖS sayfalarına ulaşabilirsiniz.</p>
+            <input type="text" id="uniSearch" class="search-box" data-i18n-placeholder="search_ph" placeholder="🔍 Üniversite adı yazarak arayın... (Örn: Akdeniz)" onkeyup="filterUnis()">
             
-            <input type="text" id="uniSearch" class="search-box" placeholder="🔍 Üniversite adı yazarak arayın... (Örn: Akdeniz)" onkeyup="filterUnis()">
-            
-            <div class="uni-grid" id="uni-list">
-                </div>
+            <div class="uni-grid" id="uni-list"></div>
         </section>
 
         <section id="store" class="section">
-            <h2 class="section-title">YÖS ARETE Güvenli PDF Mağazası</h2>
+            <h2 class="section-title" data-i18n="store_title">YÖS ARETE Güvenli PDF Mağazası</h2>
             <div style="background: #fffbeb; border-left: 5px solid #f59e0b; padding: 20px; border-radius: 8px; margin-bottom: 30px; display: flex; align-items: center; gap: 20px;">
                 <i class="fa-solid fa-user-shield" style="font-size: 2.5rem; color: #f59e0b;"></i>
                 <div>
-                    <h3 style="color: #b45309; margin-bottom: 5px;">Anti-Korsan Güvenlik Sistemi</h3>
-                    <p style="color: #92400e; font-size: 0.9rem;">Satın aldığınız tüm PDF'ler sistem tarafından anlık olarak işlenir. Sayfaların ortasına şeffaf bir şekilde <strong>Adınız, Soyadınız ve Kimlik Numaranız</strong> kalıcı olarak basılır.</p>
+                    <h3 style="color: #b45309; margin-bottom: 5px;" data-i18n="store_sec_title">Anti-Korsan Güvenlik Sistemi</h3>
+                    <p style="color: #92400e; font-size: 0.9rem;" data-i18n="store_sec_desc">Satın aldığınız tüm PDF'ler sistem tarafından anlık olarak işlenir. Sayfaların ortasına şeffaf bir şekilde <strong>Adınız, Soyadınız ve Kimlik Numaranız</strong> kalıcı olarak basılır.</p>
                 </div>
             </div>
 
-            <h3 class="store-category"><i class="fa-solid fa-square-root-variable"></i> Matematik Setleri</h3>
+            <h3 class="store-category" data-i18n="store_cat_mat"><i class="fa-solid fa-square-root-variable"></i> Matematik Setleri</h3>
             <div class="grid-3">
                 <div class="card product-card">
-                    <div class="cat-badge">Konu Föyü</div>
-                    <div>
-                        <div class="product-icon"><i class="fa-solid fa-book-open"></i></div>
-                        <h4 style="color: var(--secondary); margin-bottom: 10px;">Matematik Ders Anlatım Föyleri</h4>
-                        <p style="color: #64748b; font-size: 0.85rem;">Tüm konular, çıkmış soru tipleri ve taktikler.</p>
-                    </div>
-                    <div>
-                        <div class="price">Fiyat Güncellenecek</div>
-                        <button class="btn">İncele</button>
-                    </div>
+                    <div class="cat-badge" data-i18n="badge_foy">Konu Föyü</div>
+                    <div><div class="product-icon"><i class="fa-solid fa-book-open"></i></div><h4 style="color: var(--secondary); margin-bottom: 10px;" data-i18n="store_mat_foy">Matematik Ders Anlatım Föyleri</h4></div>
+                    <div><div class="price" data-i18n="price_later">Fiyat Güncellenecek</div><button class="btn" data-i18n="btn_review">İncele</button></div>
                 </div>
                 <div class="card product-card">
-                    <div class="cat-badge">Soru Bankası</div>
-                    <div>
-                        <div class="product-icon"><i class="fa-solid fa-book-journal-whills"></i></div>
-                        <h4 style="color: var(--secondary); margin-bottom: 10px;">Matematik Soru Bankası</h4>
-                        <p style="color: #64748b; font-size: 0.85rem;">Yeni nesil sorular ve ÖSYM tarzı testler.</p>
-                    </div>
-                    <div>
-                        <div class="price">Fiyat Güncellenecek</div>
-                        <button class="btn">İncele</button>
-                    </div>
+                    <div class="cat-badge" data-i18n="badge_soru">Soru Bankası</div>
+                    <div><div class="product-icon"><i class="fa-solid fa-book-journal-whills"></i></div><h4 style="color: var(--secondary); margin-bottom: 10px;" data-i18n="store_mat_soru">Matematik Soru Bankası</h4></div>
+                    <div><div class="price" data-i18n="price_later">Fiyat Güncellenecek</div><button class="btn" data-i18n="btn_review">İncele</button></div>
                 </div>
                 <div class="card product-card">
-                    <div class="cat-badge">Denemeler</div>
-                    <div>
-                        <div class="product-icon"><i class="fa-solid fa-file-pen"></i></div>
-                        <h4 style="color: var(--secondary); margin-bottom: 10px;">Matematik Branş Denemeleri</h4>
-                        <p style="color: #64748b; font-size: 0.85rem;">Sadece matematiğe özel süre tutmalık denemeler.</p>
-                    </div>
-                    <div>
-                        <div class="price">Fiyat Güncellenecek</div>
-                        <button class="btn">İncele</button>
-                    </div>
+                    <div class="cat-badge" data-i18n="badge_deneme">Denemeler</div>
+                    <div><div class="product-icon"><i class="fa-solid fa-file-pen"></i></div><h4 style="color: var(--secondary); margin-bottom: 10px;" data-i18n="store_mat_deneme">Matematik Branş Denemeleri</h4></div>
+                    <div><div class="price" data-i18n="price_later">Fiyat Güncellenecek</div><button class="btn" data-i18n="btn_review">İncele</button></div>
                 </div>
             </div>
 
-            <h3 class="store-category"><i class="fa-solid fa-shapes"></i> Geometri Setleri</h3>
+            <h3 class="store-category" style="margin-top: 50px;" data-i18n="store_cat_geo"><i class="fa-solid fa-shapes"></i> Geometri Setleri</h3>
             <div class="grid-3">
                 <div class="card product-card">
-                    <div class="cat-badge">Konu Föyü</div>
-                    <div>
-                        <div class="product-icon"><i class="fa-solid fa-book-open"></i></div>
-                        <h4 style="color: var(--secondary); margin-bottom: 10px;">Geometri Ders Anlatım Föyleri</h4>
-                    </div>
-                    <div><div class="price">Fiyat Güncellenecek</div><button class="btn">İncele</button></div>
+                    <div class="cat-badge" data-i18n="badge_foy">Konu Föyü</div>
+                    <div><div class="product-icon"><i class="fa-solid fa-book-open"></i></div><h4 style="color: var(--secondary); margin-bottom: 10px;" data-i18n="store_geo_foy">Geometri Ders Anlatım Föyleri</h4></div>
+                    <div><div class="price" data-i18n="price_later">Fiyat Güncellenecek</div><button class="btn" data-i18n="btn_review">İncele</button></div>
                 </div>
                 <div class="card product-card">
-                    <div class="cat-badge">Soru Bankası</div>
-                    <div>
-                        <div class="product-icon"><i class="fa-solid fa-compass"></i></div>
-                        <h4 style="color: var(--secondary); margin-bottom: 10px;">Geometri Soru Bankası</h4>
-                    </div>
-                    <div><div class="price">Fiyat Güncellenecek</div><button class="btn">İncele</button></div>
+                    <div class="cat-badge" data-i18n="badge_soru">Soru Bankası</div>
+                    <div><div class="product-icon"><i class="fa-solid fa-compass"></i></div><h4 style="color: var(--secondary); margin-bottom: 10px;" data-i18n="store_geo_soru">Geometri Soru Bankası</h4></div>
+                    <div><div class="price" data-i18n="price_later">Fiyat Güncellenecek</div><button class="btn" data-i18n="btn_review">İncele</button></div>
                 </div>
                 <div class="card product-card">
-                    <div class="cat-badge">Denemeler</div>
-                    <div>
-                        <div class="product-icon"><i class="fa-solid fa-ruler-combined"></i></div>
-                        <h4 style="color: var(--secondary); margin-bottom: 10px;">Geometri Branş Denemeleri</h4>
-                    </div>
-                    <div><div class="price">Fiyat Güncellenecek</div><button class="btn">İncele</button></div>
+                    <div class="cat-badge" data-i18n="badge_deneme">Denemeler</div>
+                    <div><div class="product-icon"><i class="fa-solid fa-ruler-combined"></i></div><h4 style="color: var(--secondary); margin-bottom: 10px;" data-i18n="store_geo_deneme">Geometri Branş Denemeleri</h4></div>
+                    <div><div class="price" data-i18n="price_later">Fiyat Güncellenecek</div><button class="btn" data-i18n="btn_review">İncele</button></div>
                 </div>
             </div>
 
-            <h3 class="store-category"><i class="fa-solid fa-brain"></i> Sayısal Yetenek (IQ) Setleri</h3>
+            <h3 class="store-category" style="margin-top: 50px;" data-i18n="store_cat_iq"><i class="fa-solid fa-brain"></i> Sayısal Yetenek (IQ) Setleri</h3>
             <div class="grid-3">
                 <div class="card product-card">
-                    <div class="cat-badge">Konu Föyü</div>
-                    <div>
-                        <div class="product-icon"><i class="fa-solid fa-book-open"></i></div>
-                        <h4 style="color: var(--secondary); margin-bottom: 10px;">IQ Ders Anlatım Föyleri</h4>
-                    </div>
-                    <div><div class="price">Fiyat Güncellenecek</div><button class="btn">İncele</button></div>
+                    <div class="cat-badge" data-i18n="badge_foy">Konu Föyü</div>
+                    <div><div class="product-icon"><i class="fa-solid fa-book-open"></i></div><h4 style="color: var(--secondary); margin-bottom: 10px;" data-i18n="store_iq_foy">IQ Ders Anlatım Föyleri</h4></div>
+                    <div><div class="price" data-i18n="price_later">Fiyat Güncellenecek</div><button class="btn" data-i18n="btn_review">İncele</button></div>
                 </div>
                 <div class="card product-card">
-                    <div class="cat-badge">Soru Bankası</div>
-                    <div>
-                        <div class="product-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
-                        <h4 style="color: var(--secondary); margin-bottom: 10px;">IQ Soru Bankası</h4>
-                    </div>
-                    <div><div class="price">Fiyat Güncellenecek</div><button class="btn">İncele</button></div>
+                    <div class="cat-badge" data-i18n="badge_soru">Soru Bankası</div>
+                    <div><div class="product-icon"><i class="fa-solid fa-puzzle-piece"></i></div><h4 style="color: var(--secondary); margin-bottom: 10px;" data-i18n="store_iq_soru">IQ Soru Bankası</h4></div>
+                    <div><div class="price" data-i18n="price_later">Fiyat Güncellenecek</div><button class="btn" data-i18n="btn_review">İncele</button></div>
                 </div>
                 <div class="card product-card">
-                    <div class="cat-badge">Denemeler</div>
-                    <div>
-                        <div class="product-icon"><i class="fa-solid fa-cubes"></i></div>
-                        <h4 style="color: var(--secondary); margin-bottom: 10px;">IQ Branş Denemeleri</h4>
-                    </div>
-                    <div><div class="price">Fiyat Güncellenecek</div><button class="btn">İncele</button></div>
+                    <div class="cat-badge" data-i18n="badge_deneme">Denemeler</div>
+                    <div><div class="product-icon"><i class="fa-solid fa-cubes"></i></div><h4 style="color: var(--secondary); margin-bottom: 10px;" data-i18n="store_iq_deneme">IQ Branş Denemeleri</h4></div>
+                    <div><div class="price" data-i18n="price_later">Fiyat Güncellenecek</div><button class="btn" data-i18n="btn_review">İncele</button></div>
                 </div>
             </div>
 
-            <h3 class="store-category" style="color: var(--primary);"><i class="fa-solid fa-layer-group"></i> Sadece Denemeler</h3>
+            <h3 class="store-category" style="margin-top: 50px; color: var(--primary);" data-i18n="store_cat_deneme"><i class="fa-solid fa-layer-group"></i> Sadece Denemeler</h3>
             <div class="grid-2">
                 <div class="card product-card" style="border: 2px solid var(--primary);">
-                    <div class="cat-badge" style="background: var(--primary);">TR-YÖS Formatı</div>
+                    <div class="cat-badge" style="background: var(--primary);" data-i18n="badge_deneme">Denemeler</div>
                     <div>
                         <div class="product-icon"><i class="fa-solid fa-stopwatch"></i></div>
-                        <h4 style="color: var(--secondary); margin-bottom: 10px;">YÖS ARETE Genel Deneme Sınavları</h4>
-                        <p style="color: #64748b; font-size: 0.9rem;">ÖSYM ile birebir aynı zorluk derecesinde, 40 IQ, 30 Mat ve 10 Geo formatında tam kapsamlı deneme seti.</p>
+                        <h4 style="color: var(--secondary); margin-bottom: 10px;" data-i18n="store_genel_deneme">YÖS ARETE Genel Deneme Sınavları</h4>
+                        <p style="color: #64748b; font-size: 0.9rem;" data-i18n="store_genel_deneme_desc">ÖSYM ile birebir aynı zorluk derecesinde, 40 IQ, 30 Mat ve 10 Geo formatında tam kapsamlı deneme seti.</p>
                     </div>
                     <div>
-                        <div class="price" style="color: var(--primary);">Fiyat Güncellenecek</div>
-                        <button class="btn">İncele</button>
+                        <div class="price" style="color: var(--primary);" data-i18n="price_later">Fiyat Güncellenecek</div>
+                        <button class="btn" data-i18n="btn_review">İncele</button>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="videos" class="section">
-            <h2 class="section-title">YÖS ARETE Ders Videoları</h2>
-            <p style="color: #64748b; margin-bottom: 30px; font-size: 1.1rem;">Kanalımızdaki en kritik konu anlatımlarını ve soru çözümlerini reklamsız izleyin.</p>
+            <h2 class="section-title" data-i18n="vid_title">YÖS ARETE Ders Videoları</h2>
+            <p style="color: #64748b; margin-bottom: 30px; font-size: 1.1rem;" data-i18n="vid_desc">Kanalımızdaki en kritik konu anlatımlarını ve soru çözümlerini reklamsız izleyin.</p>
             
             <div class="grid-3">
-                <div class="card" style="padding: 15px;">
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/B2346EGXTyI?si=2Vz4_aoPf0a72VY9" title="YÖS Arete Video 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                </div>
-                <div class="card" style="padding: 15px;">
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/OT8av2MylAQ?si=1I1WJZwLfKXeNLjT" title="YÖS Arete Video 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                </div>
-                <div class="card" style="padding: 15px;">
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/pi2nLpvt8aY?si=jkMNgCymcJP795TY" title="YÖS Arete Video 3" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                </div>
+                <div class="card" style="padding: 15px;"><div class="video-container"><iframe src="https://www.youtube.com/embed/B2346EGXTyI?si=2Vz4_aoPf0a72VY9" allowfullscreen></iframe></div></div>
+                <div class="card" style="padding: 15px;"><div class="video-container"><iframe src="https://www.youtube.com/embed/OT8av2MylAQ?si=1I1WJZwLfKXeNLjT" allowfullscreen></iframe></div></div>
+                <div class="card" style="padding: 15px;"><div class="video-container"><iframe src="https://www.youtube.com/embed/pi2nLpvt8aY?si=jkMNgCymcJP795TY" allowfullscreen></iframe></div></div>
             </div>
-
             <div style="text-align: center; margin-top: 40px;">
-                <a href="https://www.youtube.com/@yosarete" target="_blank" class="btn" style="width: auto; padding: 15px 40px; background: #ff0000; color: white;"><i class="fa-brands fa-youtube"></i> Kanalın Tümüne Git ve Abone Ol</a>
+                <a href="https://www.youtube.com/@yosarete" target="_blank" class="btn" style="width: auto; padding: 15px 40px; background: #ff0000; color: white;" data-i18n="btn_channel"><i class="fa-brands fa-youtube"></i> Kanalın Tümüne Git ve Abone Ol</a>
             </div>
         </section>
     </main>
@@ -378,11 +349,214 @@
     </footer>
 
     <script>
-        // --- Sayfa / Sekme Değiştirme Sistemi (SPA) ---
+        // --- 1. ÇOKLU DİL (i18n) SÖZLÜĞÜ ---
+        const translations = {
+            tr: {
+                announce: "DUYURULAR",
+                ticker: "📢 <a href='https://www.osym.gov.tr/' target='_blank'>TR-YÖS Kılavuzu ve Resmi Duyurular İçin ÖSYM Sayfasına Git <i class='fa-solid fa-arrow-up-right-from-square'></i></a> • 🎓 <a href='https://www.yok.gov.tr/' target='_blank'>YÖK Yabancı Uyruklu Öğrenci Kararları İçin Tıklayın <i class='fa-solid fa-arrow-up-right-from-square'></i></a>",
+                nav_home: "Ana Sayfa", nav_calc: "Puan Hesapla", nav_unis: "Üniversiteler", nav_store: "<i class='fa-solid fa-cart-shopping'></i> Mağaza", nav_videos: "<i class='fa-brands fa-youtube' style='color:#ff0000;'></i> Videolar",
+                hero_title: "TR-YÖS'te Zirveyi Hedefleyenlerin<br><span style='color: var(--accent);'>Tek Adresi</span>",
+                hero_desc: "ÖSYM algoritmasına tam uyumlu puan hesaplama motoru, üniversite listeleri ve kopyalanamaz akıllı PDF eğitim setlerimizle çalışmaya hemen başla.",
+                btn_store: "PDF Mağazasını İncele", btn_calc: "Puan Hesapla",
+                card_calc: "TR-YÖS Simülasyonu", card_calc_desc: "ÖSYM'nin standart sapma ve ağırlıklı puan sistemine birebir uygun hesaplama motoru.",
+                card_store: "Güvenli PDF Mağazası", card_store_desc: "Kişiye özel T.C. Kimlik filigranlı Matematik, Geometri ve IQ föyleri.",
+                card_uni: "Üniversite Rehberi", card_uni_desc: "Türkiye genelinde YÖS ile öğrenci kabul eden prestijli üniversitelerin güncel listesi.",
+                calc_title: "ÖSYM Kılavuzuna Göre TR-YÖS Puanı Hesapla",
+                calc_info: "<strong><i class='fa-solid fa-circle-info'></i> Hesaplama Altyapısı (ÖSYM Kılavuzu)</strong><br>• 4 Yanlış 1 Doğruyu götürür.<br>• Adayın hesaplama yapılabilmesi için testlerin <strong>en az birinden 0.5 ham puan</strong> alması zorunludur.<br>• Çıkan sonuç ÖSYM'nin <strong>100 - 500</strong> ölçeğine dönüştürülür.",
+                iq_label: "Sayısal Yetenek (IQ)", iq_desc: "Toplam 40 Soru", mat_label: "Matematik", mat_desc: "Toplam 30 Soru", geo_label: "Geometri", geo_desc: "Toplam 10 Soru",
+                correct: "DOĞRU", wrong: "YANLIŞ", btn_calc_submit: "Puanımı Hesapla", result_title: "Ölçeklenmiş TR-YÖS Puanınız",
+                uni_title: "YÖS İle Öğrenci Alan Üniversiteler", uni_desc: "Üniversite isimlerine tıklayarak tahmini iletişim bilgilerine ve resmi başvuru sayfalarına ulaşabilirsiniz.",
+                search_ph: "🔍 Üniversite adı yazarak arayın... (Örn: Akdeniz)",
+                store_title: "YÖS ARETE Güvenli PDF Mağazası", store_sec_title: "Anti-Korsan Güvenlik Sistemi", store_sec_desc: "Satın aldığınız tüm PDF'ler sistem tarafından anlık olarak işlenir. Sayfaların ortasına şeffaf bir şekilde <strong>Adınız, Soyadınız ve Kimlik Numaranız</strong> kalıcı olarak basılır.",
+                store_cat_mat: "Matematik Setleri", store_cat_geo: "Geometri Setleri", store_cat_iq: "Sayısal Yetenek (IQ) Setleri", store_cat_deneme: "Sadece Denemeler",
+                badge_foy: "Konu Föyü", badge_soru: "Soru Bankası", badge_deneme: "Denemeler",
+                store_mat_foy: "Matematik Ders Anlatım Föyleri", store_mat_soru: "Matematik Soru Bankası", store_mat_deneme: "Matematik Branş Denemeleri",
+                store_geo_foy: "Geometri Ders Anlatım Föyleri", store_geo_soru: "Geometri Soru Bankası", store_geo_deneme: "Geometri Branş Denemeleri",
+                store_iq_foy: "IQ Ders Anlatım Föyleri", store_iq_soru: "IQ Soru Bankası", store_iq_deneme: "IQ Branş Denemeleri",
+                store_genel_deneme: "YÖS ARETE Genel Deneme Sınavları", store_genel_deneme_desc: "ÖSYM ile birebir aynı zorluk derecesinde, 40 IQ, 30 Mat ve 10 Geo formatında tam kapsamlı deneme seti.",
+                price_later: "Fiyat Güncellenecek", btn_review: "İncele",
+                vid_title: "YÖS ARETE Ders Videoları", vid_desc: "Kanalımızdaki en kritik konu anlatımlarını ve soru çözümlerini reklamsız izleyin.", btn_channel: "<i class='fa-brands fa-youtube'></i> Kanalın Tümüne Git ve Abone Ol",
+                uni_web: "Resmi Web Sitesi", uni_mail: "E-Posta (Tahmini)", uni_search: "YÖS Başvurusunu Google'da Araştır"
+            },
+            en: {
+                announce: "ANNOUNCEMENTS",
+                ticker: "📢 <a href='https://www.osym.gov.tr/' target='_blank'>Go to ÖSYM Page for TR-YÖS Guide & Official Announcements <i class='fa-solid fa-arrow-up-right-from-square'></i></a> • 🎓 <a href='https://www.yok.gov.tr/' target='_blank'>Click for YÖK International Student Decisions <i class='fa-solid fa-arrow-up-right-from-square'></i></a>",
+                nav_home: "Home", nav_calc: "Calculator", nav_unis: "Universities", nav_store: "<i class='fa-solid fa-cart-shopping'></i> Store", nav_videos: "<i class='fa-brands fa-youtube' style='color:#ff0000;'></i> Videos",
+                hero_title: "The Ultimate Destination for<br><span style='color: var(--accent);'>TR-YÖS Success</span>",
+                hero_desc: "Start studying immediately with our ÖSYM-compatible score calculator, university lists, and anti-piracy smart PDF education sets.",
+                btn_store: "Visit PDF Store", btn_calc: "Calculate Score",
+                card_calc: "TR-YÖS Simulation", card_calc_desc: "Calculation engine matching OSYM's standard deviation and 100-500 scale.",
+                card_store: "Secure PDF Store", card_store_desc: "Personalized watermarked Math, Geometry, and IQ fascicles.",
+                card_uni: "University Guide", card_uni_desc: "Updated list of prestigious universities accepting students via YÖS in Turkey.",
+                calc_title: "Calculate TR-YÖS Score (OSYM Guidelines)",
+                calc_info: "<strong><i class='fa-solid fa-circle-info'></i> Calculation Rules (OSYM)</strong><br>• 4 wrong answers cancel 1 correct answer.<br>• Candidates must score <strong>at least 0.5 raw points</strong> in at least one test.<br>• The result is scaled to OSYM's <strong>100 - 500</strong> range.",
+                iq_label: "Numerical Ability (IQ)", iq_desc: "40 Questions Total", mat_label: "Mathematics", mat_desc: "30 Questions Total", geo_label: "Geometry", geo_desc: "10 Questions Total",
+                correct: "CORRECT", wrong: "WRONG", btn_calc_submit: "Calculate My Score", result_title: "Your Scaled TR-YÖS Score",
+                uni_title: "Universities Accepting YÖS", uni_desc: "Click on university names to see estimated contact details and official application pages.",
+                search_ph: "🔍 Search by university name... (e.g., Akdeniz)",
+                store_title: "YÖS ARETE Secure PDF Store", store_sec_title: "Anti-Piracy Security System", store_sec_desc: "All purchased PDFs are processed instantly. Your <strong>Name, Surname, and ID Number</strong> are permanently printed transparently on the pages.",
+                store_cat_mat: "Mathematics Sets", store_cat_geo: "Geometry Sets", store_cat_iq: "Numerical Ability (IQ) Sets", store_cat_deneme: "Mock Exams Only",
+                badge_foy: "Lecture Notes", badge_soru: "Question Bank", badge_deneme: "Mock Exams",
+                store_mat_foy: "Math Lecture Notes", store_mat_soru: "Math Question Bank", store_mat_deneme: "Math Mock Exams",
+                store_geo_foy: "Geometry Lecture Notes", store_geo_soru: "Geometry Question Bank", store_geo_deneme: "Geometry Mock Exams",
+                store_iq_foy: "IQ Lecture Notes", store_iq_soru: "IQ Question Bank", store_iq_deneme: "IQ Mock Exams",
+                store_genel_deneme: "YÖS ARETE General Mock Exams", store_genel_deneme_desc: "Full mock exam set in exact OSYM difficulty with 40 IQ, 30 Math, and 10 Geometry format.",
+                price_later: "Price TBA", btn_review: "Review",
+                vid_title: "YÖS ARETE Video Lessons", vid_desc: "Watch the most critical lectures and question solutions from our channel ad-free.", btn_channel: "<i class='fa-brands fa-youtube'></i> Go to Full Channel & Subscribe",
+                uni_web: "Official Website", uni_mail: "Email (Estimated)", uni_search: "Search YÖS on Google"
+            },
+            ar: {
+                announce: "إعلانات",
+                ticker: "📢 <a href='https://www.osym.gov.tr/' target='_blank'>انتقل إلى صفحة ÖSYM للحصول على دليل TR-YÖS <i class='fa-solid fa-arrow-up-right-from-square'></i></a> • 🎓 <a href='https://www.yok.gov.tr/' target='_blank'>انقر هنا لقرارات YÖK للطلاب الأجانب <i class='fa-solid fa-arrow-up-right-from-square'></i></a>",
+                nav_home: "الرئيسية", nav_calc: "حساب النقاط", nav_unis: "الجامعات", nav_store: "<i class='fa-solid fa-cart-shopping'></i> المتجر", nav_videos: "<i class='fa-brands fa-youtube' style='color:#ff0000;'></i> فيديوهات",
+                hero_title: "الوجهة النهائية للنجاح في<br><span style='color: var(--accent);'>امتحان TR-YÖS</span>",
+                hero_desc: "ابدأ الدراسة فوراً مع حاسبة النقاط المتوافقة مع ÖSYM، وقوائم الجامعات، وملفات PDF التعليمية الذكية المحمية.",
+                btn_store: "زيارة متجر PDF", btn_calc: "حساب النقاط",
+                card_calc: "محاكاة TR-YÖS", card_calc_desc: "محرك حساب يتطابق مع الانحراف المعياري لـ OSYM ومقياس 100-500.",
+                card_store: "متجر PDF الآمن", card_store_desc: "مذكرات رياضيات وهندسة وذكاء مخصصة بعلامة مائية باسمك.",
+                card_uni: "دليل الجامعات", card_uni_desc: "قائمة محدثة للجامعات التي تقبل الطلاب عبر YÖS في تركيا.",
+                calc_title: "حساب نقاط TR-YÖS (وفقاً لـ OSYM)",
+                calc_info: "<strong><i class='fa-solid fa-circle-info'></i> قواعد الحساب (OSYM)</strong><br>• 4 إجابات خاطئة تلغي إجابة صحيحة.<br>• يجب أن يحصل المرشح على <strong>0.5 نقطة خام على الأقل</strong> في اختبار واحد.<br>• يتم تحويل النتيجة إلى مقياس <strong>100 - 500</strong>.",
+                iq_label: "القدرة العددية (IQ)", iq_desc: "إجمالي 40 سؤالاً", mat_label: "الرياضيات", mat_desc: "إجمالي 30 سؤالاً", geo_label: "الهندسة", geo_desc: "إجمالي 10 أسئلة",
+                correct: "صحيح", wrong: "خطأ", btn_calc_submit: "احسب نتيجتي", result_title: "درجة TR-YÖS الخاصة بك",
+                uni_title: "الجامعات التي تقبل YÖS", uni_desc: "انقر على أسماء الجامعات لرؤية جهات الاتصال وصفحات التقديم.",
+                search_ph: "🔍 ابحث باسم الجامعة... (مثل: Akdeniz)",
+                store_title: "متجر YÖS ARETE الآمن (PDF)", store_sec_title: "نظام الأمان لمكافحة القرصنة", store_sec_desc: "تتم طباعة <strong>اسمك ورقم هويتك</strong> بشكل دائم على الصفحات لحمايتها من المشاركة.",
+                store_cat_mat: "مجموعات الرياضيات", store_cat_geo: "مجموعات الهندسة", store_cat_iq: "مجموعات الذكاء (IQ)", store_cat_deneme: "الامتحانات التجريبية فقط",
+                badge_foy: "مذكرات", badge_soru: "بنك أسئلة", badge_deneme: "امتحانات تجريبية",
+                store_mat_foy: "مذكرات الرياضيات", store_mat_soru: "بنك أسئلة الرياضيات", store_mat_deneme: "امتحانات تجريبية للرياضيات",
+                store_geo_foy: "مذكرات الهندسة", store_geo_soru: "بنك أسئلة الهندسة", store_geo_deneme: "امتحانات تجريبية للهندسة",
+                store_iq_foy: "مذكرات الذكاء (IQ)", store_iq_soru: "بنك أسئلة الذكاء", store_iq_deneme: "امتحانات تجريبية للذكاء",
+                store_genel_deneme: "امتحانات YÖS ARETE الشاملة", store_genel_deneme_desc: "مجموعة امتحانات بنفس مستوى OSYM، بصيغة 40 IQ و30 رياضيات و10 هندسة.",
+                price_later: "سيتم تحديث السعر", btn_review: "عرض",
+                vid_title: "دروس فيديو YÖS ARETE", vid_desc: "شاهد أهم الشروحات وحلول الأسئلة من قناتنا بدون إعلانات.", btn_channel: "<i class='fa-brands fa-youtube'></i> انتقل إلى القناة واشترك",
+                uni_web: "الموقع الرسمي", uni_mail: "البريد (تقريبي)", uni_search: "ابحث عن YÖS في جوجل"
+            },
+            az: {
+                announce: "ELANLAR",
+                ticker: "📢 <a href='https://www.osym.gov.tr/' target='_blank'>TR-YÖS Bələdçisi və Rəsmi Elanlar üçün ÖSYM-ə Keç <i class='fa-solid fa-arrow-up-right-from-square'></i></a> • 🎓 <a href='https://www.yok.gov.tr/' target='_blank'>YÖK Xarici Tələbə Qərarları İçin Klikləyin <i class='fa-solid fa-arrow-up-right-from-square'></i></a>",
+                nav_home: "Ana Səhifə", nav_calc: "Bal Hesabla", nav_unis: "Universitetlər", nav_store: "<i class='fa-solid fa-cart-shopping'></i> Mağaza", nav_videos: "<i class='fa-brands fa-youtube' style='color:#ff0000;'></i> Videolar",
+                hero_title: "TR-YÖS-də Zirvəni Hədəfləyənlərin<br><span style='color: var(--accent);'>Tək Ünvanı</span>",
+                hero_desc: "ÖSYM alqoritminə tam uyğun bal hesablama motoru, universitet siyahıları və kopyalanmayan ağıllı PDF təhsil setləri.",
+                btn_store: "PDF Mağazasına Bax", btn_calc: "Bal Hesabla",
+                card_calc: "TR-YÖS Simulyasiyası", card_calc_desc: "ÖSYM-nin 100-500 bal sisteminə tam uyğun hesablama motoru.",
+                card_store: "Təhlükəsiz PDF Mağazası", card_store_desc: "Şəxsə özəl su nişanlı Riyaziyyat, Həndəsə və Məntiq vəsaitləri.",
+                card_uni: "Universitet Bələdçisi", card_uni_desc: "Türkiyə üzrə YÖS ilə tələbə qəbul edən universitetlərin siyahısı.",
+                calc_title: "ÖSYM Qaydalarına Görə Balı Hesabla",
+                calc_info: "<strong><i class='fa-solid fa-circle-info'></i> Hesablama Qaydaları (ÖSYM)</strong><br>• 4 səhv 1 doğrunu aparır.<br>• Testlərin <strong>ən az birindən 0.5 xam bal</strong> toplamaq məcburidir.<br>• Nəticə ÖSYM-nin <strong>100 - 500</strong> şkalasına çevrilir.",
+                iq_label: "Riyazi Məntiq (IQ)", iq_desc: "Cəmi 40 Sual", mat_label: "Riyaziyyat", mat_desc: "Cəmi 30 Sual", geo_label: "Həndəsə", geo_desc: "Cəmi 10 Sual",
+                correct: "DOĞRU", wrong: "YALNIŞ", btn_calc_submit: "Balımı Hesabla", result_title: "TR-YÖS Balınız",
+                uni_title: "YÖS İlə Tələbə Qəbul Edən Universitetlər", uni_desc: "Əlaqə məlumatları və YÖS müraciət səhifələri üçün universitetin üzərinə klikləyin.",
+                search_ph: "🔍 Universitet adı yazaraq axtarın... (Məs: Akdeniz)",
+                store_title: "YÖS ARETE Təhlükəsiz PDF Mağazası", store_sec_title: "Anti-Pirat Təhlükəsizlik Sistemi", store_sec_desc: "Aldığınız bütün PDF-lərə <strong>Adınız, Soyadınız və Şəxsiyyət Vəsiqəsi Nömrəniz</strong> qalıcı olaraq çap edilir.",
+                store_cat_mat: "Riyaziyyat Setləri", store_cat_geo: "Həndəsə Setləri", store_cat_iq: "Riyazi Məntiq (IQ) Setləri", store_cat_deneme: "Sadəcə Sınaqlar",
+                badge_foy: "Mövzu İzahı", badge_soru: "Sual Bankı", badge_deneme: "Sınaqlar",
+                store_mat_foy: "Riyaziyyat Mövzu İzahları", store_mat_soru: "Riyaziyyat Sual Bankı", store_mat_deneme: "Riyaziyyat Sınaq İmtahanları",
+                store_geo_foy: "Həndəsə Mövzu İzahları", store_geo_soru: "Həndəsə Sual Bankı", store_geo_deneme: "Həndəsə Sınaq İmtahanları",
+                store_iq_foy: "Məntiq (IQ) Mövzu İzahları", store_iq_soru: "Məntiq Sual Bankı", store_iq_deneme: "Məntiq Sınaq İmtahanları",
+                store_genel_deneme: "YÖS ARETE Ümumi Sınaq İmtahanları", store_genel_deneme_desc: "ÖSYM ilə eyni çətinlikdə, 40 IQ, 30 Riyaziyyat və 10 Həndəsə formatında tam sınaq seti.",
+                price_later: "Qiymət Yenilənəcək", btn_review: "İncələ",
+                vid_title: "YÖS ARETE Dərs Videoları", vid_desc: "Kanalımızdakı ən vacib mövzu izahlarını reklamsız izləyin.", btn_channel: "<i class='fa-brands fa-youtube'></i> Kanala Keç və Abunə Ol",
+                uni_web: "Rəsmi Veb Sayt", uni_mail: "E-Poçt (Təxmini)", uni_search: "YÖS Haqqında Axtar"
+            }
+        };
+
+        function setLang(lang) {
+            // HTML dil ve yön (RTL/LTR) ayarları
+            document.documentElement.lang = lang;
+            if (lang === 'ar') {
+                document.documentElement.dir = 'rtl';
+            } else {
+                document.documentElement.dir = 'ltr';
+            }
+
+            // Buton aktifliği
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+
+            // Tüm data-i18n etiketlerini çevir
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            // Input Placeholder'ı çevir
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            // Akordeonların içindeki dil de değişsin diye listeyi tekrar çiziyoruz
+            filterUnis();
+        }
+
+        // --- 2. ÜNİVERSİTE LİSTESİ VE AKORDEON (Açılır Kutu) SİSTEMİ ---
+        const universities = [
+            "Akdeniz Üniversitesi", "Anadolu Üniversitesi", "Ankara Üniversitesi", "Atatürk Üniversitesi", "Atılım Üniversitesi", "Bahçeşehir Üniversitesi", "Beykent Üniversitesi", "Bilkent Üniversitesi", "Boğaziçi Üniversitesi", "Çankaya Üniversitesi", "Çukurova Üniversitesi", "Doğuş Üniversitesi", "Doğu Akdeniz Üniversitesi", "Dokuz Eylül Üniversitesi", "Ege Üniversitesi", "Erciyes Üniversitesi", "Fatih Üniversitesi", "Galatasaray Üniversitesi", "Gazi Üniversitesi", "Gaziantep Üniversitesi", "Girne American Üniversitesi", "Hacettepe Üniversitesi", "Haliç Üniversitesi", "Işık Üniversitesi", "İstanbul Üniversitesi", "İstanbul Bilgi Üniversitesi", "İstanbul Kültür Üniversitesi", "İstanbul Teknik Üniversitesi", "İzmir Yüksek Teknoloji Enstitüsü", "İzmir Ekonomi Üniversitesi", "Kadir Has Üniversitesi", "Kafkas Üniversitesi", "Koç Üniversitesi", "Mimar Sinan Üniversitesi", "Marmara Üniversitesi", "Okan Üniversitesi", "Ondokuz Mayıs Üniversitesi", "Orta Doğu Teknik Üniversitesi", "Osmangazi Üniversitesi", "Sabancı Üniversitesi", "Karadeniz Teknik Üniversitesi", "Selçuk Üniversitesi", "Ufuk Üniversitesi", "Uludağ Üniversitesi", "Uluslararası Kıbrıs Üniversitesi", "Yakın Doğu Üniversitesi", "Yeditepe Üniversitesi", "Yıldız Teknik Üniversitesi"
+        ].sort((a,b) => a.localeCompare(b, 'tr'));
+
+        function renderUnis(list) {
+            const uniContainer = document.getElementById('uni-list');
+            uniContainer.innerHTML = "";
+            const lang = document.documentElement.lang || 'tr';
+            const t = translations[lang];
+
+            list.forEach(uni => {
+                // Yapay Zeka benzeri domain tahmin edici
+                let domain = uni.toLowerCase()
+                                .replace(/ /g, '')
+                                .replace(/ü/g, 'u').replace(/ö/g, 'o').replace(/ı/g, 'i').replace(/ş/g, 's').replace(/ç/g, 'c').replace(/ğ/g, 'g')
+                                .replace('universitesi', '')
+                                .replace('enstitusu', '');
+                
+                let website = `https://www.${domain}.edu.tr`;
+                let email = `yos@${domain}.edu.tr`;
+                let searchLink = `https://www.google.com/search?q=${encodeURIComponent(uni + " YÖS başvuru sayfası")}`;
+
+                let div = document.createElement('div');
+                div.className = 'uni-item';
+                div.onclick = function() {
+                    this.classList.toggle('active');
+                };
+
+                div.innerHTML = `
+                    <div class="uni-header">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <i class="fa-solid fa-building-columns" style="color:var(--primary); font-size:1.1rem;"></i> 
+                            <span>${uni}</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down icon-arrow"></i>
+                    </div>
+                    <div class="uni-body" onclick="event.stopPropagation()">
+                        <p><i class="fa-solid fa-globe icon-info"></i> <strong>${t.uni_web}:</strong> <a href="${website}" target="_blank" style="margin-left:5px;">${website}</a></p>
+                        <p><i class="fa-solid fa-envelope icon-info"></i> <strong>${t.uni_mail}:</strong> <a href="mailto:${email}" style="margin-left:5px;">${email}</a></p>
+                        <div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;">
+                            <a href="${website}" target="_blank" class="uni-action-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> ${t.uni_web}</a>
+                            <a href="${searchLink}" target="_blank" class="uni-action-btn outline"><i class="fa-brands fa-google"></i> ${t.uni_search}</a>
+                        </div>
+                    </div>
+                `;
+                uniContainer.appendChild(div);
+            });
+        }
+        
+        // İlk yüklemede listeyi oluştur
+        renderUnis(universities);
+
+        function filterUnis() {
+            let search = document.getElementById('uniSearch').value.toLocaleLowerCase('tr');
+            let filtered = universities.filter(uni => uni.toLocaleLowerCase('tr').includes(search));
+            renderUnis(filtered);
+        }
+
+        // --- 3. SAYFA GEÇİŞLERİ (SPA) ---
         function showSection(sectionId) {
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('#nav-menu a').forEach(link => link.classList.remove('active'));
-            
             document.getElementById(sectionId).classList.add('active');
             
             if(event && event.currentTarget.tagName === 'A' && event.currentTarget.parentElement.tagName === 'LI') {
@@ -391,102 +565,46 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // --- Üniversite Listesi ve Arama ---
-        const universities = [
-            "Akdeniz Üniversitesi", "Anadolu Üniversitesi", "Ankara Üniversitesi", "Atatürk Üniversitesi", 
-            "Atılım Üniversitesi", "Bahçeşehir Üniversitesi", "Beykent Üniversitesi", "Bilkent Üniversitesi", 
-            "Boğaziçi Üniversitesi", "Çankaya Üniversitesi", "Çukurova Üniversitesi", "Doğuş Üniversitesi", 
-            "Doğu Akdeniz Üniversitesi", "Dokuz Eylül Üniversitesi", "Ege Üniversitesi", "Erciyes Üniversitesi", 
-            "Fatih Üniversitesi", "Galatasaray Üniversitesi", "Gazi Üniversitesi", "Gaziantep Üniversitesi", 
-            "Girne American Üniversitesi", "Hacettepe Üniversitesi", "Haliç Üniversitesi", "Işık Üniversitesi", 
-            "İstanbul Üniversitesi", "İstanbul Bilgi Üniversitesi", "İstanbul Kültür Üniversitesi", 
-            "İstanbul Teknik Üniversitesi", "İzmir Yüksek Teknoloji Enstitüsü", "İzmir Ekonomi Üniversitesi", 
-            "Kadir Has Üniversitesi", "Kafkas Üniversitesi", "Koç Üniversitesi", "Mimar Sinan Üniversitesi", 
-            "Marmara Üniversitesi", "Okan Üniversitesi", "Ondokuz Mayıs Üniversitesi", "Orta Doğu Teknik Üniversitesi", 
-            "Osmangazi Üniversitesi", "Sabancı Üniversitesi", "Karadeniz Teknik Üniversitesi", 
-            "Selçuk Üniversitesi", "Ufuk Üniversitesi", "Uludağ Üniversitesi", "Uluslararası Kıbrıs Üniversitesi", 
-            "Yakın Doğu Üniversitesi", "Yeditepe Üniversitesi", "Yıldız Teknik Üniversitesi"
-        ].sort((a,b) => a.localeCompare(b, 'tr'));
-
-        const uniContainer = document.getElementById('uni-list');
-
-        function renderUnis(list) {
-            uniContainer.innerHTML = "";
-            list.forEach(uni => {
-                let div = document.createElement('div');
-                div.className = 'uni-item';
-                div.innerHTML = `<div><i class="fa-solid fa-building-columns" style="color: var(--accent); font-size: 1.2rem; width: 30px;"></i></div> <div>${uni}</div>`;
-                uniContainer.appendChild(div);
-            });
-        }
-        
-        // İlk yüklemede hepsini göster
-        renderUnis(universities);
-
-        // Arama (Filtreleme)
-        function filterUnis() {
-            let search = document.getElementById('uniSearch').value.toLocaleLowerCase('tr');
-            let filtered = universities.filter(uni => uni.toLocaleLowerCase('tr').includes(search));
-            renderUnis(filtered);
-        }
-
-        // --- TR-YÖS Puan Hesaplama (ÖSYM Algoritması) ---
+        // --- 4. ÖSYM TR-YÖS PUAN HESAPLAMA MOTORU ---
         function hesapla() {
             let iqD = parseFloat(document.getElementById('iqD').value) || 0; let iqY = parseFloat(document.getElementById('iqY').value) || 0;
             let matD = parseFloat(document.getElementById('matD').value) || 0; let matY = parseFloat(document.getElementById('matY').value) || 0;
             let geoD = parseFloat(document.getElementById('geoD').value) || 0; let geoY = parseFloat(document.getElementById('geoY').value) || 0;
 
             if(iqD + iqY > 40 || matD + matY > 30 || geoD + geoY > 10) {
-                alert("Hata: Girdiğiniz soru sayıları testin limitlerini aşıyor! (IQ: Max 40, Mat: Max 30, Geo: Max 10)"); 
+                alert(document.documentElement.lang === 'tr' ? "Hata: Girdiğiniz soruların toplamı sınırları aştı!" : "Error: Question limits exceeded!"); 
                 return;
             }
 
-            // 1. Ham Puan Hesabı (4 Yanlış 1 Doğruyu Götürür)
             let iqHam = iqD - (iqY / 4);
-            let matHam = matD - (matY / 4);
-            let geoHam = geoD - (geoY / 4);
-            let temelMatHam = matHam + geoHam; // Temel Matematik (Mat + Geo Toplamı)
+            let temelMatHam = (matD - (matY / 4)) + (geoD - (geoY / 4));
 
-            // Kılavuz Kuralı: En az bir testten 0.5 ham puan almak zorunludur
             if(iqHam < 0.5 && temelMatHam < 0.5) {
                 document.getElementById('score-text').innerHTML = "<span style='font-size:1.5rem; color:#dc2626;'>HESAPLANAMADI</span>";
-                document.getElementById('net-text').innerText = "ÖSYM Kılavuzuna Göre: Testlerin en az birinden 0.5 ham puan almalısınız.";
                 document.getElementById('calc-result').style.display = "block";
                 return;
             }
 
-            // 2. T-Puanı (Standart Puan) Dönüşümü - Simülasyon
-            // (Ortalama:50, SS:10). Geçmiş veriler baz alınarak tahmini Türkiye ortalaması eklendi.
-            let mean_iq = 18.0, std_iq = 8.0; 
-            let mean_mat = 13.0, std_mat = 9.0;
-
+            // Standart Sapma Formülü (Tahmini Simülasyon)
+            let mean_iq = 18.0, std_iq = 8.0, mean_mat = 13.0, std_mat = 9.0;
             let iqStandart = 50 + 10 * ((iqHam - mean_iq) / std_iq);
             let matStandart = 50 + 10 * ((temelMatHam - mean_mat) / std_mat);
-
-            // 3. Ağırlıklı Puan (Sayısal Yetenek: 0.45, Temel Matematik: 0.55)
             let agirlikliPuan = (0.45 * iqStandart) + (0.55 * matStandart);
 
-            // 4. 100 - 500 Ölçeğine Dönüştürme
-            // Matematiksel olarak alınabilecek en düşük ve en yüksek T-Puan sınırları simülasyonu:
-            // Maksimum netler: IQ: 40, MatGeo: 40
-            // Minimum netler: IQ: -10, MatGeo: -10
-            
-            let min_iqStandart = 50 + 10 * ((-10 - mean_iq) / std_iq);
-            let min_matStandart = 50 + 10 * ((-10 - mean_mat) / std_mat);
-            let min_agirlikli = (0.45 * min_iqStandart) + (0.55 * min_matStandart); 
-            
-            let max_iqStandart = 50 + 10 * ((40 - mean_iq) / std_iq);
-            let max_matStandart = 50 + 10 * ((40 - mean_mat) / std_mat);
-            let max_agirlikli = (0.45 * max_iqStandart) + (0.55 * max_matStandart); 
+            // 100 - 500 Baremine Ölçekleme Formülü
+            let min_agirlikli = (0.45 * (50 + 10 * ((-10 - mean_iq) / std_iq))) + (0.55 * (50 + 10 * ((-10 - mean_mat) / std_mat))); 
+            let max_agirlikli = (0.45 * (50 + 10 * ((40 - mean_iq) / std_iq))) + (0.55 * (50 + 10 * ((40 - mean_mat) / std_mat))); 
             
             let tryos_puan = 100 + ((agirlikliPuan - min_agirlikli) / (max_agirlikli - min_agirlikli)) * 400;
 
-            // Puanı sınırla
             if(tryos_puan > 500) tryos_puan = 500;
             if(tryos_puan < 100) tryos_puan = 100;
 
             document.getElementById('score-text').innerText = tryos_puan.toFixed(3);
-            document.getElementById('net-text').innerText = `Sayısal Yetenek (IQ) Neti: ${iqHam.toFixed(2)} | Temel Matematik Neti: ${temelMatHam.toFixed(2)}`;
+            
+            let lang = document.documentElement.lang;
+            let txt = lang === 'tr' ? `IQ: ${iqHam.toFixed(2)} Net | Mat/Geo: ${temelMatHam.toFixed(2)} Net` : `IQ Net: ${iqHam.toFixed(2)} | Math Net: ${temelMatHam.toFixed(2)}`;
+            document.getElementById('net-text').innerText = txt;
             document.getElementById('calc-result').style.display = "block";
         }
     </script>
