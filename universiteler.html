@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Üniversiteler – Yösarete</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+.main-wrap { max-width:1200px;margin:0 auto;padding:36px 5vw 80px; }
+.filter-band { background:var(--white);border:1px solid var(--border);border-radius:16px;padding:20px 24px;margin-bottom:28px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end; }
+.fb-group label { font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mid);display:block;margin-bottom:6px; }
+.fb-group select, .fb-group input { padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;min-width:160px;transition:border-color .2s; }
+.fb-group select:focus,.fb-group input:focus { border-color:var(--accent); }
+.ara-btn { background:var(--accent);color:#fff;border:none;border-radius:8px;padding:11px 24px;font-size:.88rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:auto; }
+.results-info { font-size:.85rem;color:var(--mid);margin-bottom:16px; }
+.uni-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px; }
+.uni-card { background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform .2s,box-shadow .2s;cursor:pointer; }
+.uni-card:hover { transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.09); }
+.uni-card-top { padding:20px 22px 16px;display:flex;align-items:flex-start;gap:14px;border-bottom:1px solid var(--border); }
+.uni-logo { width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0; }
+.ul-devlet { background:linear-gradient(135deg,#eff6ff,#bfdbfe); }
+.ul-vakif  { background:linear-gradient(135deg,#fff5f0,#ffd6c0); }
+.uni-info { flex:1; }
+.uni-name { font-family:'DM Serif Display',serif;font-size:1rem;margin-bottom:3px;line-height:1.3; }
+.uni-sehir { font-size:.75rem;color:var(--mid); }
+.uni-type-badge { font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-top:6px;display:inline-block; }
+.tb-devlet { background:#eff6ff;color:var(--blue); }
+.tb-vakif  { background:#fff5f0;color:var(--accent); }
+.uni-card-body { padding:14px 22px; }
+.uni-stats { display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px; }
+.uni-stat { background:var(--soft);border-radius:8px;padding:8px 12px; }
+.us-label { font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--mid);margin-bottom:2px; }
+.us-val { font-family:'DM Serif Display',serif;font-size:1rem;color:var(--ink); }
+.uni-bolumler { display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px; }
+.bolum-tag { background:var(--soft);border:1px solid var(--border);border-radius:4px;font-size:.72rem;padding:3px 10px;color:var(--mid); }
+.bolum-tag.highlight { background:#fff5f0;border-color:#ffd6c0;color:var(--accent); }
+.uni-card-footer { padding:12px 22px;border-top:1px solid var(--border);display:flex;gap:8px; }
+.detail-btn { flex:1;background:var(--soft);border:none;border-radius:8px;padding:9px;font-size:.82rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background .15s; }
+.detail-btn:hover { background:var(--border); }
+.apply-btn { flex:1;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px;font-size:.82rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer; }
+.modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s; }
+.modal-overlay.open { opacity:1;pointer-events:all; }
+.modal { background:var(--white);border-radius:20px;max-width:660px;width:92%;max-height:88vh;overflow-y:auto;transform:translateY(20px);transition:transform .25s;padding:36px; }
+.modal-overlay.open .modal { transform:translateY(0); }
+.mc-btn { float:right;background:var(--soft);border:none;border-radius:8px;padding:6px 14px;font-size:.8rem;cursor:pointer; }
+.modal h2 { font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:6px;clear:both; }
+.modal-stats-row { display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0; }
+.msr-item { background:var(--soft);border-radius:10px;padding:12px;text-align:center; }
+.msr-n { font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--accent);display:block; }
+.msr-l { font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--mid); }
+.modal-section h4 { font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mid);margin-bottom:12px; }
+.modal-bolum-table { width:100%;border-collapse:collapse;font-size:.84rem;margin-bottom:20px; }
+.modal-bolum-table th { background:var(--soft);padding:8px 12px;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--mid);border-bottom:1px solid var(--border); }
+.modal-bolum-table td { padding:10px 12px;border-bottom:1px solid var(--border); }
+.modal-bolum-table tr:last-child td { border-bottom:none; }
+</style>
+</head>
+<body>
+<script src="_shared.js"></script>
+<script>injectNav('universiteler');</script>
+
+<div class="page-content">
+<div class="hero-band">
+  <div class="hero-band-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow" style="background:var(--blue);">🎓 Rehber</div>
+    <h1>Üniversite <em>Rehberi</em></h1>
+    <p>Türkiye'deki üniversitelerin 2026 YÖS kontenjanları, harç ücretleri ve bölüm bilgileri tek sayfada.</p>
+    <div class="hero-stats-row">
+      <div><span class="hstat-n">207</span><span class="hstat-l">Üniversite</span></div>
+      <div><span class="hstat-n">3.200+</span><span class="hstat-l">Bölüm</span></div>
+      <div><span class="hstat-n">2026</span><span class="hstat-l">Güncel Veri</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="main-wrap">
+  <div class="filter-band reveal">
+    <div class="fb-group"><label>Şehir</label><select id="fSehir" onchange="filtrele()"><option value="">Tüm Şehirler</option><option>İstanbul</option><option>Ankara</option><option>İzmir</option><option>Bursa</option><option>Konya</option><option>Antalya</option></select></div>
+    <div class="fb-group"><label>Üniversite Türü</label><select id="fTur" onchange="filtrele()"><option value="">Devlet + Vakıf</option><option value="devlet">Devlet</option><option value="vakif">Vakıf</option></select></div>
+    <div class="fb-group"><label>Bölüm</label><select id="fBolum" onchange="filtrele()"><option value="">Tüm Bölümler</option><option value="tip">Tıp</option><option value="muh">Mühendislik</option><option value="isletme">İşletme</option><option value="hukuk">Hukuk</option><option value="mimarlik">Mimarlık</option></select></div>
+    <div class="fb-group"><label>Max. Taban Puan</label><input type="number" id="fPuan" placeholder="örn. 400" oninput="filtrele()"/></div>
+    <button class="ara-btn" onclick="filtrele()">Filtrele</button>
+  </div>
+  <div class="results-info" id="resultsInfo">Tüm üniversiteler gösteriliyor</div>
+  <div class="uni-grid" id="uniGrid"></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div><span class="footer-logo">Yösarete</span><p class="footer-desc">YÖS hazırlığı için kapsamlı platform.</p></div>
+    <div class="footer-col"><h4>Sayfalar</h4><a href="index.html">Ana Sayfa</a><a href="sondakika.html">Son Dakika</a><a href="nethesapla.html">Net Hesapla</a><a href="universiteler.html">Üniversiteler</a></div>
+    <div class="footer-col"><h4>Mağaza</h4><a href="magaza.html#matematik">Matematik</a><a href="magaza.html#geometri">Geometri</a><a href="magaza.html#iq">IQ / Mantık</a><a href="magaza.html#denemeler">Denemeler</a></div>
+    <div class="footer-col"><h4>İletişim</h4><a href="https://youtube.com/@yosaret" target="_blank">YouTube</a><a href="index.html#iletisim">E-posta</a></div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 Yösarete</span></div>
+</footer>
+</div>
+
+<div class="modal-overlay" id="mO" onclick="if(event.target===this)closeM()">
+  <div class="modal"><button class="mc-btn" onclick="closeM()">✕ Kapat</button><div id="mC"></div></div>
+</div>
+
+<script>
+const uniList=[
+  {id:0,name:'İstanbul Üniversitesi',sehir:'İstanbul',tur:'devlet',bolumler:['tip','muh','isletme','hukuk'],tabanlar:{tip:422,muh:365,isletme:312,hukuk:358},kontenjanlar:{tip:15,muh:30,isletme:25,hukuk:15},harc:{tip:'3.500 USD',muh:'2.000 USD',isletme:'1.500 USD',hukuk:'1.800 USD'},kuruluş:1453,ogrenci:'80.000+',desc:'Türkiye\'nin en köklü üniversitelerinden biri. Merkez kampüs Beyazıt\'ta yer alır.'},
+  {id:1,name:'Hacettepe Üniversitesi',sehir:'Ankara',tur:'devlet',bolumler:['tip','muh','isletme'],tabanlar:{tip:435,muh:372,isletme:318},kontenjanlar:{tip:12,muh:20,isletme:20},harc:{tip:'3.800 USD',muh:'2.200 USD',isletme:'1.600 USD'},kuruluş:1967,ogrenci:'40.000+',desc:'Türkiye\'nin en prestijli tıp fakültelerinden birine ev sahipliği yapar.'},
+  {id:2,name:'ODTÜ',sehir:'Ankara',tur:'devlet',bolumler:['muh','mimarlik'],tabanlar:{muh:398,mimarlik:362},kontenjanlar:{muh:25,mimarlik:18},harc:{muh:'2.500 USD',mimarlik:'2.000 USD'},kuruluş:1956,ogrenci:'30.000+',desc:'Orta Doğu Teknik Üniversitesi, mühendislik ve fen bilimleri alanında Türkiye\'nin zirvesinde.'},
+  {id:3,name:'İTÜ',sehir:'İstanbul',tur:'devlet',bolumler:['muh','mimarlik'],tabanlar:{muh:388,mimarlik:355},kontenjanlar:{muh:30,mimarlik:20},harc:{muh:'2.300 USD',mimarlik:'1.900 USD'},kuruluş:1773,ogrenci:'35.000+',desc:'İstanbul Teknik Üniversitesi, 250 yılı aşkın geçmişiyle dünyanın en eski teknik üniversitelerinden.'},
+  {id:4,name:'Boğaziçi Üniversitesi',sehir:'İstanbul',tur:'devlet',bolumler:['muh','isletme'],tabanlar:{muh:402,isletme:385},kontenjanlar:{muh:20,isletme:15},harc:{muh:'2.600 USD',isletme:'2.200 USD'},kuruluş:1863,ogrenci:'15.000+',desc:'Boğaz\'ın kıyısında yer alan, İngilizce eğitim veren seçkin devlet üniversitesi.'},
+  {id:5,name:'Ege Üniversitesi',sehir:'İzmir',tur:'devlet',bolumler:['tip','isletme'],tabanlar:{tip:412,isletme:305},kontenjanlar:{tip:10,isletme:22},harc:{tip:'3.200 USD',isletme:'1.400 USD'},kuruluş:1955,ogrenci:'70.000+',desc:'Ege\'nin en büyük üniversitesi. Tıp ve fen bilimleri güçlü.'},
+  {id:6,name:'Koç Üniversitesi',sehir:'İstanbul',tur:'vakif',bolumler:['tip','muh','isletme'],tabanlar:{tip:445,muh:415,isletme:402},kontenjanlar:{tip:8,muh:15,isletme:12},harc:{tip:'18.000 USD',muh:'10.000 USD',isletme:'8.000 USD'},kuruluş:1993,ogrenci:'8.000+',desc:'Türkiye\'nin en prestijli vakıf üniversitesi. Burs imkanları oldukça geniş.'},
+  {id:7,name:'Bilkent Üniversitesi',sehir:'Ankara',tur:'vakif',bolumler:['muh','isletme','hukuk'],tabanlar:{muh:378,isletme:365,hukuk:355},kontenjanlar:{muh:22,isletme:18,hukuk:15},harc:{muh:'8.000 USD',isletme:'7.000 USD',hukuk:'6.500 USD'},kuruluş:1984,ogrenci:'12.000+',desc:'Türkiye\'nin ilk özel üniversitesi. Geniş burs imkanları sunar.'},
+  {id:8,name:'Uludağ Üniversitesi',sehir:'Bursa',tur:'devlet',bolumler:['tip','isletme','hukuk'],tabanlar:{tip:398,isletme:298,hukuk:322},kontenjanlar:{tip:8,isletme:30,hukuk:20},harc:{tip:'2.800 USD',isletme:'1.200 USD',hukuk:'1.300 USD'},kuruluş:1975,ogrenci:'60.000+',desc:'Bursa\'nın en büyük üniversitesi. Özellikle hukuk ve işletme bölümleri tercih edilir.'},
+  {id:9,name:'Galatasaray Üniversitesi',sehir:'İstanbul',tur:'devlet',bolumler:['isletme','hukuk'],tabanlar:{isletme:375,hukuk:372},kontenjanlar:{isletme:12,hukuk:15},harc:{isletme:'2.000 USD',hukuk:'1.800 USD'},kuruluş:1992,ogrenci:'5.000+',desc:'Türk-Fransız kültüründen doğan, Fransızca eğitim imkanı sunan prestijli devlet üniversitesi.'},
+];
+const bolumAd={tip:'Tıp',muh:'Mühendislik',isletme:'İşletme',hukuk:'Hukuk',mimarlik:'Mimarlık'};
+let filtered=[...uniList];
+function filtrele(){
+  const s=document.getElementById('fSehir').value;
+  const t=document.getElementById('fTur').value;
+  const b=document.getElementById('fBolum').value;
+  const p=parseFloat(document.getElementById('fPuan').value)||9999;
+  filtered=uniList.filter(u=>{
+    if(s&&u.sehir!==s)return false;
+    if(t&&u.tur!==t)return false;
+    if(b&&!u.bolumler.includes(b))return false;
+    if(p<9999){const minTaban=Math.min(...u.bolumler.map(bl=>u.tabanlar[bl]||9999));if(minTaban>p)return false;}
+    return true;
+  });
+  document.getElementById('resultsInfo').textContent=`${filtered.length} üniversite gösteriliyor`;
+  renderGrid();
+}
+function renderGrid(){
+  const g=document.getElementById('uniGrid');
+  if(!filtered.length){g.innerHTML='<p style="text-align:center;color:var(--mid);padding:40px;grid-column:1/-1">Sonuç bulunamadı</p>';return;}
+  g.innerHTML=filtered.map(u=>{
+    const minT=Math.min(...u.bolumler.map(b=>u.tabanlar[b]||999));
+    return`<div class="uni-card reveal" onclick="openModal(${u.id})">
+      <div class="uni-card-top">
+        <div class="uni-logo ${u.tur==='devlet'?'ul-devlet':'ul-vakif'}">${u.tur==='devlet'?'🏛️':'🎓'}</div>
+        <div class="uni-info">
+          <div class="uni-name">${u.name}</div>
+          <div class="uni-sehir">📍 ${u.sehir}</div>
+          <span class="uni-type-badge ${u.tur==='devlet'?'tb-devlet':'tb-vakif'}">${u.tur==='devlet'?'Devlet':'Vakıf'}</span>
+        </div>
+      </div>
+      <div class="uni-card-body">
+        <div class="uni-stats">
+          <div class="uni-stat"><div class="us-label">Min. Taban</div><div class="us-val">${minT}</div></div>
+          <div class="uni-stat"><div class="us-label">Kuruluş</div><div class="us-val">${u.kuruluş}</div></div>
+        </div>
+        <div class="uni-bolumler">${u.bolumler.map(b=>`<span class="bolum-tag highlight">${bolumAd[b]}</span>`).join('')}</div>
+      </div>
+      <div class="uni-card-footer">
+        <button class="detail-btn">Detaylar →</button>
+        <button class="apply-btn">YÖS Başvur</button>
+      </div>
+    </div>`;
+  }).join('');
+  triggerReveal();
+}
+function openModal(id){
+  const u=uniList[id];
+  document.getElementById('mC').innerHTML=`
+    <span class="uni-type-badge ${u.tur==='devlet'?'tb-devlet':'tb-vakif'}" style="margin-bottom:10px;display:inline-block">${u.tur==='devlet'?'Devlet':'Vakıf'}</span>
+    <h2>${u.name}</h2>
+    <p style="font-size:.85rem;color:var(--mid);margin-bottom:4px">📍 ${u.sehir} · Kuruluş: ${u.kuruluş} · ${u.ogrenci} öğrenci</p>
+    <p style="font-size:.88rem;color:var(--mid);line-height:1.7;margin-bottom:16px">${u.desc}</p>
+    <div class="modal-section"><h4>2026 YÖS Bölüm Bilgileri</h4>
+    <table class="modal-bolum-table"><thead><tr><th>Bölüm</th><th>Taban Puan</th><th>Kontenjan</th><th>Harç Ücreti</th></tr></thead>
+    <tbody>${u.bolumler.map(b=>`<tr><td><strong>${bolumAd[b]}</strong></td><td><span class="puan-pill pp-b">${u.tabanlar[b]}</span></td><td>${u.kontenjanlar[b]}</td><td>${u.harc[b]}</td></tr>`).join('')}</tbody></table></div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="detail-btn" onclick="closeM()" style="flex:1">Kapat</button>
+      <a class="apply-btn" href="https://e-okul.osym.gov.tr" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none">YÖS Başvuru →</a>
+    </div>`;
+  document.getElementById('mO').classList.add('open');
+}
+function closeM(){document.getElementById('mO').classList.remove('open');}
+function triggerReveal(){
+  setTimeout(()=>document.querySelectorAll('.reveal:not(.in)').forEach((r,i)=>setTimeout(()=>r.classList.add('in'),i*60)),50);
+}
+filtrele();
+const obs=new IntersectionObserver(entries=>entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*70);obs.unobserve(e.target);}}),{threshold:.07});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>
