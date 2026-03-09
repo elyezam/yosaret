@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Son Dakika – Yösarete</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+.main-layout { max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:28px;padding:32px 5vw 80px; }
+@media(max-width:900px){.main-layout{grid-template-columns:1fr;}}
+
+.filter-bar { display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;align-items:center; }
+.filter-btn { padding:7px 16px;border-radius:30px;border:1.5px solid var(--border);background:var(--white);font-size:.78rem;font-weight:600;font-family:'DM Sans',sans-serif;color:var(--mid);cursor:pointer;transition:all .2s; }
+.filter-btn:hover { border-color:var(--accent);color:var(--accent); }
+.filter-btn.active { background:var(--accent);border-color:var(--accent);color:#fff; }
+.fc { margin-left:5px;background:rgba(0,0,0,.12);border-radius:20px;padding:1px 6px;font-size:.68rem; }
+.search-box { margin-left:auto;position:relative; }
+.search-box input { padding:7px 14px 7px 36px;border-radius:30px;border:1.5px solid var(--border);background:var(--white);font-size:.82rem;font-family:'DM Sans',sans-serif;outline:none;width:200px;transition:border-color .2s,width .3s; }
+.search-box input:focus { border-color:var(--accent);width:260px; }
+.search-icon { position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:.85rem;color:var(--mid);pointer-events:none; }
+
+.featured-card { background:var(--ink);color:#fff;border-radius:16px;padding:28px 32px;margin-bottom:20px;position:relative;overflow:hidden;cursor:pointer;transition:transform .2s; }
+.featured-card:hover { transform:translateY(-3px); }
+.featured-bg { position:absolute;right:-20px;bottom:-20px;font-size:8rem;opacity:.05;line-height:1; }
+.featured-tag { display:inline-flex;align-items:center;gap:6px;background:var(--red);border-radius:4px;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;padding:3px 10px;margin-bottom:14px; }
+.featured-tag::before { content:'';width:5px;height:5px;border-radius:50%;background:#fff;animation:blink 1s infinite; }
+.featured-card h2 { font-family:'DM Serif Display',serif;font-size:1.45rem;line-height:1.25;margin-bottom:10px; }
+.featured-card p { font-size:.88rem;color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:18px; }
+.featured-meta { display:flex;align-items:center;gap:16px;font-size:.75rem;color:rgba(255,255,255,.45); }
+.featured-meta a { color:var(--accent);text-decoration:none;font-weight:600; }
+
+.news-list { display:flex;flex-direction:column;gap:14px; }
+.news-card { background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px 20px;cursor:pointer;display:flex;gap:16px;align-items:flex-start;transition:transform .15s,border-color .2s,box-shadow .2s; }
+.news-card:hover { transform:translateX(4px);border-color:var(--accent);box-shadow:0 4px 20px rgba(232,97,42,.1); }
+.news-card.urgent    { border-left:4px solid var(--red); }
+.news-card.important { border-left:4px solid var(--amber); }
+.news-card.info      { border-left:4px solid var(--blue); }
+.news-card.success   { border-left:4px solid var(--green); }
+.news-icon { width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0; }
+.ic-red   { background:#fef2f2; }
+.ic-amber { background:#fffbeb; }
+.ic-blue  { background:#eff6ff; }
+.ic-green { background:#f0fdf4; }
+.news-body { flex:1;min-width:0; }
+.news-badge { display:inline-flex;align-items:center;gap:5px;font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:3px;padding:2px 8px;margin-bottom:6px; }
+.badge-red   { background:#fef2f2;color:var(--red); }
+.badge-amber { background:#fffbeb;color:var(--amber); }
+.badge-blue  { background:#eff6ff;color:var(--blue); }
+.badge-green { background:#f0fdf4;color:var(--green); }
+.badge-dot { width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.2s infinite; }
+.news-title { font-weight:600;font-size:.93rem;line-height:1.45;margin-bottom:6px;color:var(--ink); }
+.news-excerpt { font-size:.8rem;color:var(--mid);line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; }
+.news-meta { display:flex;align-items:center;gap:12px;font-size:.72rem;color:var(--mid); }
+.news-time { font-weight:600; }
+.news-source { background:var(--soft);border-radius:4px;padding:1px 7px; }
+.new-pill { background:var(--red);color:#fff;border-radius:4px;padding:1px 7px;font-weight:700;animation:blink 1.5s infinite; }
+
+/* SIDEBAR */
+.sidebar { display:flex;flex-direction:column;gap:20px; }
+.sidebar-card { background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden; }
+.sidebar-head { padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between; }
+.sidebar-head h3 { font-size:.88rem;font-weight:700; }
+.sidebar-head span { font-size:.72rem;color:var(--mid); }
+.date-item { display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--border); }
+.date-item:last-child { border-bottom:none; }
+.date-box { width:42px;height:42px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0; }
+.db-red { background:#fef2f2; } .db-amber { background:#fffbeb; } .db-blue { background:#eff6ff; } .db-green { background:#f0fdf4; }
+.date-day { font-family:'DM Serif Display',serif;font-size:1rem;line-height:1; }
+.dd-red { color:var(--red); } .dd-amber { color:var(--amber); } .dd-blue { color:var(--blue); } .dd-green { color:var(--green); }
+.date-mon { font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--mid); }
+.date-title { font-size:.82rem;font-weight:600;line-height:1.3; }
+.date-sub { font-size:.72rem;color:var(--mid);margin-top:2px; }
+.date-kalan { font-size:.68rem;font-weight:700;color:var(--red);margin-top:3px; }
+.source-link { display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-bottom:1px solid var(--border);text-decoration:none;transition:background .15s; }
+.source-link:last-child { border-bottom:none; }
+.source-link:hover { background:var(--soft); }
+.source-name { font-size:.82rem;font-weight:600;color:var(--ink); }
+.source-desc { font-size:.72rem;color:var(--mid); }
+
+.countdown-card { background:linear-gradient(135deg,var(--ink),#2a1a0e);color:#fff;border-radius:14px;padding:22px 18px;text-align:center; }
+.cd-label { font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:10px; }
+.cd-title { font-family:'DM Serif Display',serif;font-size:1.05rem;margin-bottom:18px;color:#fff; }
+.cd-boxes { display:flex;gap:8px;justify-content:center; }
+.cd-box { background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 12px;min-width:58px; }
+.cd-num { font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--accent);display:block;line-height:1; }
+.cd-unit { font-size:.62rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:4px; }
+.cd-sep { font-size:1.4rem;color:rgba(255,255,255,.25);align-self:center;padding-bottom:10px; }
+
+.notif-card { background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px 18px; }
+.notif-card h3 { font-size:.9rem;font-weight:700;margin-bottom:6px; }
+.notif-card p { font-size:.78rem;color:var(--mid);margin-bottom:14px;line-height:1.5; }
+.notif-input { display:flex;gap:8px; }
+.notif-input input { flex:1;padding:9px 14px;border-radius:8px;border:1.5px solid var(--border);font-size:.82rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s; }
+.notif-input input:focus { border-color:var(--accent); }
+.notif-btn { background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:.8rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap; }
+
+.modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s; }
+.modal-overlay.open { opacity:1;pointer-events:all; }
+.modal { background:var(--white);border-radius:20px;max-width:640px;width:92%;max-height:85vh;overflow-y:auto;transform:translateY(20px);transition:transform .25s;padding:36px; }
+.modal-overlay.open .modal { transform:translateY(0); }
+.modal-close-btn { float:right;background:var(--soft);border:none;border-radius:8px;padding:6px 14px;font-size:.8rem;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:16px; }
+.modal h2 { font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:10px;clear:both;line-height:1.3; }
+.modal-meta { font-size:.78rem;color:var(--mid);margin-bottom:20px;display:flex;gap:14px;flex-wrap:wrap; }
+.modal-body { font-size:.92rem;color:var(--ink);line-height:1.8; }
+.modal-body p { margin-bottom:14px; }
+.modal-body strong { color:var(--accent); }
+.modal-source { margin-top:24px;padding-top:18px;border-top:1px solid var(--border); }
+.modal-source a { color:var(--accent);font-size:.85rem;font-weight:600;text-decoration:none; }
+
+.load-more { text-align:center;margin-top:24px; }
+.load-btn { background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:12px 32px;font-size:.88rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;color:var(--ink); }
+.load-btn:hover { border-color:var(--accent);color:var(--accent); }
+@keyframes pulse-ring { 0%{box-shadow:0 0 0 0 rgba(220,38,38,.4)} 70%{box-shadow:0 0 0 8px rgba(220,38,38,0)} 100%{box-shadow:0 0 0 0 rgba(220,38,38,0)} }
+.pulse { animation:pulse-ring 2s infinite; }
+</style>
+</head>
+<body>
+<script src="_shared.js"></script>
+<script>injectNav('sondakika');</script>
+
+<div class="page-content">
+<div class="hero-band">
+  <div class="hero-band-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow" style="background:var(--red);"><span style="width:6px;height:6px;border-radius:50%;background:#fff;animation:blink 1s infinite;display:inline-block;"></span> CANLI TAKİP</div>
+    <h1>ÖSYM <em>Son Dakika</em><br/>Haberleri</h1>
+    <p>YÖS 2026 gelişmelerini anlık takip et. Başvuru tarihleri, sınav takvimi ve tüm ÖSYM duyuruları.</p>
+    <div class="hero-stats-row">
+      <div><span class="hstat-n">12</span><span class="hstat-l">2026 Haberi</span></div>
+      <div><span class="hstat-n">3</span><span class="hstat-l">Acil Duyuru</span></div>
+      <div><span class="hstat-n">8</span><span class="hstat-l">Önemli Tarih</span></div>
+      <div><span class="hstat-n" id="liveCount">9.841</span><span class="hstat-l">Aktif Takipçi</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="main-layout">
+  <div>
+    <div class="filter-bar reveal">
+      <button class="filter-btn active" onclick="filterNews('all',this)">Tümü <span class="fc">12</span></button>
+      <button class="filter-btn" onclick="filterNews('urgent',this)">🔴 Acil <span class="fc">3</span></button>
+      <button class="filter-btn" onclick="filterNews('important',this)">🟡 Önemli <span class="fc">4</span></button>
+      <button class="filter-btn" onclick="filterNews('info',this)">🔵 Bilgi <span class="fc">3</span></button>
+      <button class="filter-btn" onclick="filterNews('success',this)">🟢 Sonuç <span class="fc">2</span></button>
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Haberlerde ara..." oninput="searchNews(this.value)"/>
+      </div>
+    </div>
+
+    <div class="featured-card reveal" onclick="openModal(0)">
+      <div class="featured-bg">📋</div>
+      <div class="featured-tag">ACİL DUYURU</div>
+      <h2>YÖS 2026 Başvuruları 10 Şubat'ta Başlıyor</h2>
+      <p>ÖSYM, 2026 yılı YÖS başvuru takvimini resmi sitesinde yayımladı. Başvurular 10 Şubat – 6 Mart 2026 tarihleri arasında e-ÖSYM üzerinden alınacak.</p>
+      <div class="featured-meta">
+        <span>🕐 Bugün, 10:15</span><span>📌 ÖSYM Resmi</span>
+        <a href="https://www.osym.gov.tr" target="_blank" onclick="event.stopPropagation()">Kaynağa Git →</a>
+      </div>
+    </div>
+
+    <div class="news-list" id="newsList">
+      <div class="news-card urgent reveal" data-type="urgent" onclick="openModal(1)">
+        <div class="news-icon ic-red">🚨</div>
+        <div class="news-body">
+          <div class="news-badge badge-red"><span class="badge-dot"></span>ACİL</div>
+          <div class="news-title">ÖSYM 2026 Sınav Ücretleri Açıklandı – %22 Artış</div>
+          <div class="news-excerpt">YÖS 2026 başvuru ücreti 1.416 TL'den 1.727 TL'ye yükseldi. Yurt dışı merkezler için ek ücret 55 USD.</div>
+          <div class="news-meta"><span class="news-time">🕐 3 saat önce</span><span class="news-source">ÖSYM</span><span class="new-pill">YENİ</span></div>
+        </div>
+      </div>
+      <div class="news-card urgent reveal" data-type="urgent" onclick="openModal(2)">
+        <div class="news-icon ic-red">⚠️</div>
+        <div class="news-body">
+          <div class="news-badge badge-red"><span class="badge-dot"></span>ACİL</div>
+          <div class="news-title">e-ÖSYM Sistemi 15–16 Mart Tarihlerinde Bakımda Olacak</div>
+          <div class="news-excerpt">Teknik bakım nedeniyle başvuru portalına 2 gün erişilemeyecek. Son başvuru tarihi yaklaşıyor.</div>
+          <div class="news-meta"><span class="news-time">🕐 6 saat önce</span><span class="news-source">ÖSYM</span><span class="new-pill">YENİ</span></div>
+        </div>
+      </div>
+      <div class="news-card important reveal" data-type="important" onclick="openModal(3)">
+        <div class="news-icon ic-amber">📅</div>
+        <div class="news-body">
+          <div class="news-badge badge-amber">ÖNEMLİ</div>
+          <div class="news-title">YÖS 2026 Sınav Tarihi: 21 Haziran 2026 Pazar Günü</div>
+          <div class="news-excerpt">Sınav 09:30 ve 14:00 olmak üzere iki oturumda yapılacak. Sınav giriş belgesi Haziran başında alınabilecek.</div>
+          <div class="news-meta"><span class="news-time">🕐 1 gün önce</span><span class="news-source">ÖSYM</span></div>
+        </div>
+      </div>
+      <div class="news-card important reveal" data-type="important" onclick="openModal(4)">
+        <div class="news-icon ic-amber">🌍</div>
+        <div class="news-body">
+          <div class="news-badge badge-amber">ÖNEMLİ</div>
+          <div class="news-title">YÖS 2026 Sınav Merkezleri Güncellendi – 52 Ülkede Sınav</div>
+          <div class="news-excerpt">Yeni eklenen merkezler: Lagos, Dakka, Nairobi, Kazablanka. Toplam 52 ülkede 94 merkez.</div>
+          <div class="news-meta"><span class="news-time">🕐 2 gün önce</span><span class="news-source">ÖSYM</span></div>
+        </div>
+      </div>
+      <div class="news-card important reveal" data-type="important" onclick="openModal(5)">
+        <div class="news-icon ic-amber">🏛️</div>
+        <div class="news-body">
+          <div class="news-badge badge-amber">ÖNEMLİ</div>
+          <div class="news-title">2026–2027 Yabancı Öğrenci Kontenjanları %20 Artırıldı</div>
+          <div class="news-excerpt">YÖK kararıyla devlet üniversitelerinde yabancı uyruklu kontenjanlar artırıldı. Tıp ve mühendislik öne çıktı.</div>
+          <div class="news-meta"><span class="news-time">🕐 3 gün önce</span><span class="news-source">YÖK</span></div>
+        </div>
+      </div>
+      <div class="news-card important reveal" data-type="important" onclick="openModal(6)">
+        <div class="news-icon ic-amber">📘</div>
+        <div class="news-body">
+          <div class="news-badge badge-amber">ÖNEMLİ</div>
+          <div class="news-title">YÖS 2026 Kılavuzu Resmi Sitede Yayımlandı</div>
+          <div class="news-excerpt">Başvuru şartları, puan hesaplama yöntemi, sınav kapsamı ve yerleştirme kriterleri kılavuzda yer alıyor.</div>
+          <div class="news-meta"><span class="news-time">🕐 4 gün önce</span><span class="news-source">ÖSYM</span></div>
+        </div>
+      </div>
+      <div class="news-card info reveal" data-type="info" onclick="openModal(7)">
+        <div class="news-icon ic-blue">📊</div>
+        <div class="news-body">
+          <div class="news-badge badge-blue">BİLGİ</div>
+          <div class="news-title">2025 YÖS İstatistikleri: 108.000 Başvuru, 83.000 Katılımcı</div>
+          <div class="news-excerpt">135 ülkeden 108 bin aday başvurdu. Rekor katılım. En fazla Irak, İran ve Suriye'den geldi.</div>
+          <div class="news-meta"><span class="news-time">🕐 1 hafta önce</span><span class="news-source">ÖSYM</span></div>
+        </div>
+      </div>
+      <div class="news-card info reveal" data-type="info" onclick="openModal(8)">
+        <div class="news-icon ic-blue">🎓</div>
+        <div class="news-body">
+          <div class="news-badge badge-blue">BİLGİ</div>
+          <div class="news-title">Türkçe Hazırlık Muafiyeti Genişletildi – 12 Yeni Bölüm Eklendi</div>
+          <div class="news-excerpt">Bazı üniversiteler belirli puanın üzerindeki adaylara Türkçe hazırlık muafiyeti sağlayacak.</div>
+          <div class="news-meta"><span class="news-time">🕐 10 gün önce</span><span class="news-source">YÖK</span></div>
+        </div>
+      </div>
+      <div class="news-card info reveal" data-type="info" onclick="openModal(9)">
+        <div class="news-icon ic-blue">💰</div>
+        <div class="news-body">
+          <div class="news-badge badge-blue">BİLGİ</div>
+          <div class="news-title">2026–2027 Üniversite Harç Ücretleri Açıklandı</div>
+          <div class="news-excerpt">Yabancı uyruklu öğrenciler için harç ücretleri bölüme ve üniversiteye göre güncellendi.</div>
+          <div class="news-meta"><span class="news-time">🕐 2 hafta önce</span><span class="news-source">YÖK</span></div>
+        </div>
+      </div>
+      <div class="news-card success reveal" data-type="success" onclick="openModal(10)">
+        <div class="news-icon ic-green">✅</div>
+        <div class="news-body">
+          <div class="news-badge badge-green">SONUÇ</div>
+          <div class="news-title">2025 YÖS Sonuçları Açıklandı – Sorgulama Ekranı Aktif</div>
+          <div class="news-excerpt">Adaylar T.C. kimlik numarası veya pasaport numarasıyla sonuç sorgulayabilir.</div>
+          <div class="news-meta"><span class="news-time">🕐 3 hafta önce</span><span class="news-source">ÖSYM</span></div>
+        </div>
+      </div>
+      <div class="news-card success reveal" data-type="success" onclick="openModal(11)">
+        <div class="news-icon ic-green">🏆</div>
+        <div class="news-body">
+          <div class="news-badge badge-green">SONUÇ</div>
+          <div class="news-title">2025 YÖS Yerleştirme Sonuçları Açıklandı</div>
+          <div class="news-excerpt">72.000 adayın üniversite tercihleri sonuçlandı. Tıp fakültelerinde rekor puan.</div>
+          <div class="news-meta"><span class="news-time">🕐 1 ay önce</span><span class="news-source">YÖK</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="load-more reveal">
+      <button class="load-btn" onclick="loadMore()">Daha Fazla Haber Yükle ↓</button>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="countdown-card reveal pulse">
+      <div class="cd-label">⏳ Sınava Kalan</div>
+      <div class="cd-title">YÖS 2026 – 21 Haziran</div>
+      <div class="cd-boxes">
+        <div class="cd-box"><span class="cd-num" id="cd-g">--</span><div class="cd-unit">Gün</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-box"><span class="cd-num" id="cd-s">--</span><div class="cd-unit">Saat</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-box"><span class="cd-num" id="cd-d">--</span><div class="cd-unit">Dk</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-box"><span class="cd-num" id="cd-sn">--</span><div class="cd-unit">Sn</div></div>
+      </div>
+    </div>
+
+    <div class="sidebar-card reveal">
+      <div class="sidebar-head"><h3>📅 YÖS 2026 Tarihleri</h3><span>Takvim</span></div>
+      <div>
+        <div class="date-item"><div class="date-box db-red"><span class="date-day dd-red">10</span><span class="date-mon">Şub</span></div><div><div class="date-title">Başvuru Başlangıcı</div><div class="date-sub">e-ÖSYM üzerinden</div><div class="date-kalan">GEÇTİ</div></div></div>
+        <div class="date-item"><div class="date-box db-amber"><span class="date-day dd-amber">6</span><span class="date-mon">Mar</span></div><div><div class="date-title">Başvuru Son Günü</div><div class="date-sub">Saat 23:59'a kadar</div></div></div>
+        <div class="date-item"><div class="date-box db-blue"><span class="date-day dd-blue">5</span><span class="date-mon">Haz</span></div><div><div class="date-title">Sınav Giriş Belgesi</div><div class="date-sub">e-ÖSYM'den</div></div></div>
+        <div class="date-item"><div class="date-box db-green"><span class="date-day dd-green">21</span><span class="date-mon">Haz</span></div><div><div class="date-title">YÖS 2026 Sınavı 🎯</div><div class="date-sub">09:30 – 14:00</div></div></div>
+        <div class="date-item"><div class="date-box db-blue"><span class="date-day dd-blue">20</span><span class="date-mon">Tem</span></div><div><div class="date-title">Sonuçlar Açıklanır</div><div class="date-sub">ÖSYM sistemi</div></div></div>
+        <div class="date-item"><div class="date-box db-amber"><span class="date-day dd-amber">5</span><span class="date-mon">Ağu</span></div><div><div class="date-title">Yerleştirme Tercihleri</div><div class="date-sub">YÖK sistemi</div></div></div>
+      </div>
+    </div>
+
+    <div class="sidebar-card reveal">
+      <div class="sidebar-head"><h3>🔗 Resmi Kaynaklar</h3></div>
+      <div>
+        <a class="source-link" href="https://www.osym.gov.tr" target="_blank"><div><div class="source-name">ÖSYM Resmi</div><div class="source-desc">Duyurular & başvuru</div></div><span style="color:var(--accent)">↗</span></a>
+        <a class="source-link" href="https://www.yok.gov.tr" target="_blank"><div><div class="source-name">YÖK Resmi</div><div class="source-desc">Kontenjan & yerleştirme</div></div><span style="color:var(--accent)">↗</span></a>
+        <a class="source-link" href="https://e-okul.osym.gov.tr" target="_blank"><div><div class="source-name">e-ÖSYM Başvuru</div><div class="source-desc">Online başvuru portalı</div></div><span style="color:var(--accent)">↗</span></a>
+        <a class="source-link" href="https://sonuc.osym.gov.tr" target="_blank"><div><div class="source-name">Sonuç Sorgulama</div><div class="source-desc">YÖS sonuç ekranı</div></div><span style="color:var(--accent)">↗</span></a>
+      </div>
+    </div>
+
+    <div class="notif-card reveal">
+      <h3>🔔 Bildirim Al</h3>
+      <p>Yeni ÖSYM duyurusu geldiğinde sana haber verelim.</p>
+      <div class="notif-input">
+        <input type="email" placeholder="E-posta adresin"/>
+        <button class="notif-btn" onclick="this.textContent='✓';this.style.background='var(--green)'">Abone Ol</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div><span class="footer-logo">Yösarete</span><p class="footer-desc">YÖS ve YÖSARET sınavlarına hazırlanan öğrenciler için kapsamlı platform.</p></div>
+    <div class="footer-col"><h4>Sayfalar</h4><a href="index.html">Ana Sayfa</a><a href="sondakika.html">Son Dakika</a><a href="nethesapla.html">Net Hesapla</a><a href="universiteler.html">Üniversiteler</a></div>
+    <div class="footer-col"><h4>Mağaza</h4><a href="magaza.html#matematik">Matematik</a><a href="magaza.html#geometri">Geometri</a><a href="magaza.html#iq">IQ / Mantık</a><a href="magaza.html#denemeler">Denemeler</a></div>
+    <div class="footer-col"><h4>İletişim</h4><a href="https://youtube.com/@yosaret" target="_blank">YouTube</a><a href="#">Instagram</a><a href="index.html#iletisim">E-posta</a></div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 Yösarete · Tüm hakları saklıdır</span></div>
+</footer>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close-btn" onclick="closeModal()">✕ Kapat</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+const haberler=[
+  {badge:'ACİL DUYURU',bc:'badge-red',title:'YÖS 2026 Başvuruları 10 Şubat\'ta Başlıyor',date:'Bugün, 10:15',source:'ÖSYM',url:'https://www.osym.gov.tr',body:`<p>ÖSYM, YÖS 2026 başvuru takvimini yayımladı.</p><p><strong>Başvuru:</strong> 10 Şubat – 6 Mart 2026, e-ÖSYM üzerinden.</p><p><strong>Sınav:</strong> 21 Haziran 2026, iki oturumda (09:30 / 14:00).</p><p><strong>Kimler Başvurabilir?</strong> Yabancı uyruklu adaylar ve Mavi Kart sahipleri.</p>`},
+  {badge:'ACİL',bc:'badge-red',title:'2026 Sınav Ücretleri Açıklandı – %22 Artış',date:'3 saat önce',source:'ÖSYM',url:'https://www.osym.gov.tr',body:`<p>YÖS 2026 başvuru ücreti <strong>1.727 TL</strong> olarak belirlendi (2025: 1.416 TL).</p><p>Yurt dışı sınav merkezleri için ek ücret <strong>55 USD</strong>.</p>`},
+  {badge:'ACİL',bc:'badge-red',title:'e-ÖSYM 15–16 Mart\'ta Bakımda',date:'6 saat önce',source:'ÖSYM',url:'https://www.osym.gov.tr',body:`<p>e-ÖSYM portalı <strong>15 Mart 22:00 – 16 Mart 10:00</strong> arasında kapalı olacak.</p><p>Son başvuru tarihi 6 Mart olduğu için bu bakım süreci başvuruları etkilemeyecek.</p>`},
+  {badge:'ÖNEMLİ',bc:'badge-amber',title:'YÖS 2026: 21 Haziran 2026',date:'1 gün önce',source:'ÖSYM',url:'https://www.osym.gov.tr',body:`<p>YÖS 2026 sınavı <strong>21 Haziran 2026 Pazar</strong> günü yapılacak.</p><p>Sabah oturumu 09:30, öğleden sonra oturumu 14:00'da başlayacak. Sınav süresi her oturum için 135 dakika.</p>`},
+  {badge:'ÖNEMLİ',bc:'badge-amber',title:'52 Ülkede Sınav Merkezi',date:'2 gün önce',source:'ÖSYM',url:'https://www.osym.gov.tr',body:`<p>YÖS 2026 için <strong>52 ülkede 94 sınav merkezi</strong> açılacak.</p><p>Yeni eklenen şehirler: Lagos, Dakka, Nairobi, Kazablanka, Tiflis, Almatı.</p>`},
+  {badge:'ÖNEMLİ',bc:'badge-amber',title:'Kontenjanlar %20 Artırıldı',date:'3 gün önce',source:'YÖK',url:'https://www.yok.gov.tr',body:`<p>2026–2027 öğretim yılında devlet üniversitelerinin yabancı uyruklu kontenjanları <strong>%20 artırıldı.</strong></p><p>Tıp ve mühendislik fakülteleri en yüksek artışı gördü.</p>`},
+  {badge:'ÖNEMLİ',bc:'badge-amber',title:'YÖS 2026 Kılavuzu Yayımlandı',date:'4 gün önce',source:'ÖSYM',url:'https://www.osym.gov.tr',body:`<p>YÖS 2026 kılavuzu PDF olarak yayımlandı.</p><p><strong>İndirmek için:</strong> osym.gov.tr → Sınavlar → YÖS 2026 → Kılavuz</p>`},
+  {badge:'BİLGİ',bc:'badge-blue',title:'2025 YÖS İstatistikleri',date:'1 hafta önce',source:'ÖSYM',url:'https://www.osym.gov.tr',body:`<p>2025 YÖS'e <strong>135 ülkeden 108.243 kişi başvurdu</strong>, 83.412 kişi sınava girdi.</p><p>En fazla katılım: Irak (%33), İran (%17), Suriye (%10), Libya (%8).</p>`},
+  {badge:'BİLGİ',bc:'badge-blue',title:'Türkçe Hazırlık Muafiyeti Genişletildi',date:'10 gün önce',source:'YÖK',url:'https://www.yok.gov.tr',body:`<p>YÖS'te belirli puan aralığındaki adaylar için Türkçe hazırlık muafiyeti sağlayan bölüm sayısı artırıldı.</p><p>Güncel liste YÖK Atlas'tan sorgulanabilir.</p>`},
+  {badge:'BİLGİ',bc:'badge-blue',title:'2026–2027 Harç Ücretleri',date:'2 hafta önce',source:'YÖK',url:'https://www.yok.gov.tr',body:`<p>Yabancı uyruklu öğrenciler için 2026–2027 harç ücretleri bölüm bazında açıklandı.</p><p>Tıp: 6.000–18.000 USD, Mühendislik: 2.500–8.000 USD, İşletme: 1.500–5.000 USD (üniversiteye göre değişir).</p>`},
+  {badge:'SONUÇ',bc:'badge-green',title:'2025 YÖS Sonuçları Açıklandı',date:'3 hafta önce',source:'ÖSYM',url:'https://sonuc.osym.gov.tr',body:`<p>2025 YÖS sonuçları ÖSYM sisteminde yayımlandı.</p><p><strong>Giriş:</strong> sonuc.osym.gov.tr → T.C. kimlik no veya pasaport numarası ile sorgulayın.</p>`},
+  {badge:'SONUÇ',bc:'badge-green',title:'2025 Yerleştirme Tamamlandı',date:'1 ay önce',source:'YÖK',url:'https://www.yok.gov.tr',body:`<p>2025 YÖS yerleştirme sonuçları açıklandı. <strong>72.000 adayın</strong> tercihleri sonuçlandı.</p><p>Tıp fakültelerinde taban puan rekor seviyeye ulaştı.</p>`},
+];
+function openModal(i){
+  const h=haberler[i];
+  document.getElementById('modalContent').innerHTML=`<div class="news-badge ${h.bc}" style="margin-bottom:10px">${h.badge}</div><h2>${h.title}</h2><div class="modal-meta"><span>🕐 ${h.date}</span><span>📌 ${h.source}</span></div><div class="modal-body">${h.body}</div><div class="modal-source">🔗 Kaynak: <a href="${h.url}" target="_blank">${h.source}</a></div>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
+function filterNews(type,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#newsList .news-card').forEach(c=>{c.style.display=(type==='all'||c.dataset.type===type)?'':'none';});
+}
+function searchNews(q){
+  const r=q.toLowerCase();
+  document.querySelectorAll('#newsList .news-card').forEach(c=>{
+    const t=c.querySelector('.news-title').textContent.toLowerCase();
+    c.style.display=t.includes(r)?'':'none';
+  });
+}
+function loadMore(){
+  document.querySelector('.load-more').innerHTML='<p style="color:var(--mid);font-size:.85rem;text-align:center;">Tüm haberler yüklendi.</p>';
+}
+function updateCD(){
+  const diff=new Date('2026-06-21T09:30:00')-new Date();
+  if(diff<=0)return;
+  document.getElementById('cd-g').textContent=String(Math.floor(diff/86400000)).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('cd-d').textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  document.getElementById('cd-sn').textContent=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+}
+updateCD();setInterval(updateCD,1000);
+let lN=9841;setInterval(()=>{lN+=Math.floor(Math.random()*3)-1;document.getElementById('liveCount').textContent=lN.toLocaleString('tr-TR');},3000);
+const obs=new IntersectionObserver(entries=>entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*70);obs.unobserve(e.target);}}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>
